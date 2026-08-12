@@ -1,0 +1,26 @@
+[build]
+  base = "site"
+  command = "npm run build"
+  publish = "site/dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# One-pager ohne Router: alle unbekannten Pfade auf die Startseite.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Gehashte Build-Assets sind unveraenderlich -> dauerhaft cachen.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
