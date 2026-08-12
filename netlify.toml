@@ -1,7 +1,8 @@
 [build]
   base = "site"
   command = "npm run build"
-  publish = "site/dist"
+  # Relativ zu base ("site"), nicht zum Repo-Root.
+  publish = "dist"
 
 [build.environment]
   NODE_VERSION = "22"
