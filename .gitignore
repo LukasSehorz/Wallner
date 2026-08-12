@@ -1,0 +1,18 @@
+# Abhängigkeiten und Build-Artefakte
+node_modules/
+dist/
+.vite/
+*.tsbuildinfo
+
+# Logs
+*.log
+npm-debug.log*
+
+# Betriebssystem
+.DS_Store
+Thumbs.db
+
+# Lokale Umgebung — hier gehören API-Schlüssel hin, niemals ins Repo
+.env
+.env.*
+!.env.example

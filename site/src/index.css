@@ -1,0 +1,146 @@
+@import './fonts.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --shell: 1280px;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-forest-900 font-sans text-[15px] font-normal leading-relaxed text-white/80 antialiased;
+    overflow-x: clip;
+  }
+
+  /* Rokkitt 900 als Headline-Schrift — gewählt nach dem Sporn- und
+     Serifencharakter der Wortmarke im Logo. Sie baut deutlich größer als die
+     zuvor eingesetzte Teko, deshalb sind alle Headline-Größen um Faktor ~0.8
+     zurückgenommen; die optische Größe bleibt damit unverändert. */
+  .display {
+    @apply font-display uppercase;
+    font-weight: 900;
+    line-height: 0.94;
+    letter-spacing: -0.005em;
+    font-feature-settings: 'kern' 1;
+  }
+
+  ::selection {
+    background: #aac527;
+    color: #0a140a;
+  }
+
+  :focus-visible {
+    outline: 3px solid #aac527;
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+@layer components {
+  .shell {
+    @apply mx-auto w-full max-w-shell px-5 sm:px-8;
+  }
+
+  /* Eyebrow mit Strich davor — Signature-Element der Referenz */
+  .eyebrow {
+    @apply flex items-start gap-4 text-[11px] font-bold uppercase tracking-[0.22em];
+  }
+  .eyebrow::before {
+    content: '';
+    @apply block h-px w-12 shrink-0 bg-current opacity-70;
+    /* Bei zweizeiliger Eyebrow bleibt der Strich auf der ersten Zeile. */
+    margin-top: 0.62em;
+  }
+  /* Zentrierte Variante: ohne den gespiegelten Strich säße die Schrift um die
+     halbe Strichbreite außermittig. */
+  .eyebrow-center {
+    @apply justify-center;
+  }
+  .eyebrow-center::after {
+    content: '';
+    @apply block h-px w-12 shrink-0 bg-current opacity-70;
+    margin-top: 0.62em;
+  }
+
+  /* Headline-Verlauf: erste Zeile verläuft ins Transparente */
+  .h-gradient {
+    background: linear-gradient(180deg, #ffffff 8%, rgba(255, 255, 255, 0.42) 96%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .btn {
+    @apply inline-flex items-center gap-2.5 rounded-lg px-6 py-3.5 font-display text-[17px] font-bold uppercase tracking-wider transition-all duration-200;
+  }
+  .btn-primary {
+    @apply btn text-forest-950 shadow-limeGlow;
+    background: linear-gradient(160deg, #c3e02e 0%, #aac527 55%, #93b01e 100%);
+  }
+  .btn-primary:hover {
+    @apply -translate-y-0.5 brightness-110;
+  }
+  .btn-ghost {
+    @apply btn border border-white/20 bg-white/[.06] text-white backdrop-blur;
+  }
+  .btn-ghost:hover {
+    @apply -translate-y-0.5 border-lime/60 bg-white/[.12];
+  }
+
+  .pill {
+    @apply inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[.07] px-4 py-2 text-[13px] font-semibold text-white/90 backdrop-blur;
+  }
+  .pill::before {
+    content: '';
+    @apply block h-1.5 w-1.5 rounded-full bg-lime;
+  }
+
+  .card-dark {
+    @apply rounded-2xl border border-white/[.09] bg-white/[.045];
+  }
+
+  /* Verlaufsband, das dunkle und helle Sections verbindet.
+     Bewusst ohne olivfarbenen Mittelton — der erzeugte sonst ein trübes
+     Band statt eines sauberen Übergangs. */
+  .fade-to-light {
+    background: linear-gradient(180deg, #0a140a 0%, #0f1b0d 40%, #d6e2c6 84%, #f3f7ee 100%);
+  }
+}
+
+@layer utilities {
+  .grain::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
