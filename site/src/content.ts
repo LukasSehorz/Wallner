@@ -112,8 +112,10 @@ export const leistungen: Leistung[] = [
     kicker: 'Auf den neuesten Stand',
     text: 'Wir bringen Ihre Räume auf den neuesten Stand. Dabei legen wir großen Wert auf eine sorgfältige Planung und eine präzise Ausführung, um den Charme und die Funktionalität Ihrer Immobilie zu erhalten und zu verbessern.',
     detail: 'Im Bestand entscheidet sich vieles erst, wenn die erste Wand offen ist. Deshalb planen wir Sanierungen mit Luft für das, was dahinter zum Vorschein kommt, und stimmen jeden Schritt mit Ihnen ab, bevor er ausgeführt wird. Der Anspruch bleibt dabei immer derselbe: Was den Charakter des Hauses ausmacht, bleibt erhalten — alles andere kommt auf den heutigen Stand.',
-    bild: '/bilder/dachgeschoss-ausbau.jpg',
-    bildDetail: '/bilder/dachgeschoss-holzboden.jpg',
+    // Zeile 02 zeigt bildDetail als Breitband — dafür das einzige echte
+    // 16:9-Motiv im Bestand, sonst wird ein Hochformat hart beschnitten.
+    bild: '/bilder/dachgeschoss-holzboden.jpg',
+    bildDetail: '/bilder/dachgeschoss-ausbau.jpg',
     bullets: [
       'Altbausanierung mit Respekt vor dem Bestand',
       'Sorgfältige Planung, präzise Ausführung',

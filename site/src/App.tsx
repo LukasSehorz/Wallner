@@ -1,7 +1,6 @@
 import Nav from './components/Nav'
 import Hero from './components/Hero'
 import Leistungsband from './components/Leistungsband'
-import Leistungen from './components/Leistungen'
 import LeistungenDetail from './components/LeistungenDetail'
 import UeberUns from './components/UeberUns'
 import Projekte from './components/Projekte'
@@ -27,7 +26,6 @@ export default function App() {
       <main>
         <Hero />
         <Leistungsband />
-        <Leistungen />
         <LeistungenDetail />
         <UeberUns />
         <Projekte />
