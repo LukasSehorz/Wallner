@@ -445,25 +445,10 @@ export default function LeistungenDetail() {
         />
 
         <div className="shell relative">
-          {/* Sectionmarke: Überschrift über dünnem grünen Trennstrich */}
-          <div data-auftakt className="pb-14 pt-12 lg:pb-20 lg:pt-16">
-            <p className="text-[11px] font-bold uppercase tracking-[0.26em] text-lime">
-              Unsere Leistungen
-            </p>
-            <div
-              aria-hidden="true"
-              className="mt-4 h-px w-full"
-              style={{
-                background:
-                  'linear-gradient(90deg, rgba(170,197,39,.85) 0%, rgba(170,197,39,.35) 55%, rgba(170,197,39,0) 100%)',
-              }}
-            />
-          </div>
-
           {/* Kopf: Regler links, Einordnung rechts */}
           <div
             data-kopf
-            className="grid gap-10 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] lg:items-center lg:gap-16"
+            className="grid gap-10 pt-12 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] lg:items-center lg:gap-16 lg:pt-16"
           >
             <VorherNachher />
 
@@ -486,8 +471,26 @@ export default function LeistungenDetail() {
             </div>
           </div>
 
+          {/* Auftakt der Leistungsliste: Überschrift über dünnem grünen Strich.
+              Steht bewusst zwischen Regler und Leistung 01 — dort trennt er
+              die Einleitung von der Aufzählung. Der erste Artikel führt
+              deshalb keinen eigenen oberen Rahmen (first:border-t-0). */}
+          <div data-auftakt className="mt-20 lg:mt-28">
+            <p className="text-[11px] font-bold uppercase tracking-[0.26em] text-lime">
+              Unsere Leistungen
+            </p>
+            <div
+              aria-hidden="true"
+              className="mt-4 h-px w-full"
+              style={{
+                background:
+                  'linear-gradient(90deg, rgba(170,197,39,.85) 0%, rgba(170,197,39,.35) 55%, rgba(170,197,39,0) 100%)',
+              }}
+            />
+          </div>
+
           {/* Die sechs Leistungen, jede in eigener Anordnung */}
-          <div className="mt-20 lg:mt-28">
+          <div className="mt-12 lg:mt-16">
             {leistungen.map((l, i) => {
               const Anordnung = ANORDNUNGEN[i % ANORDNUNGEN.length]
               return (
