@@ -58,9 +58,12 @@ export default function VorherNachher() {
 
   return (
     <figure className="m-0">
+      {/* Rahmen exakt 16:9 — das Seitenverhältnis der beiden Quellbilder
+          (2400×1350). Jedes andere Verhältnis zwingt object-cover zum
+          Beschneiden, und man sähe nicht mehr den ganzen Raum. */}
       <div
         ref={box}
-        className="group relative aspect-[16/10] w-full overflow-hidden rounded-[22px] border border-white/10 shadow-plate sm:aspect-[16/9]"
+        className="group relative aspect-[16/9] w-full overflow-hidden rounded-[22px] border border-white/10 shadow-plate"
       >
         {/* Grundebene: das fertige Ergebnis */}
         <img

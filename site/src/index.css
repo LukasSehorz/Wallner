@@ -112,6 +112,13 @@
   .fade-to-light {
     background: linear-gradient(180deg, #0a140a 0%, #0f1b0d 40%, #d6e2c6 84%, #f3f7ee 100%);
   }
+
+  /* Gegenrichtung für hell → dunkel, gespiegelt zu .fade-to-light: gleiche
+     Stützfarben, gleiche Abstände. So sieht der Übergang vom Leistungsband in
+     die Leistungen genauso aus wie der von den Leistungen zu „Über uns". */
+  .fade-to-dark {
+    background: linear-gradient(180deg, #f3f7ee 0%, #d6e2c6 16%, #0f1b0d 60%, #060d06 100%);
+  }
 }
 
 @layer utilities {

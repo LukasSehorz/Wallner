@@ -387,90 +387,120 @@ export default function LeistungenDetail() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
     const ctx = gsap.context(() => {
-      gsap.from('[data-kopf] > *', {
-        y: 26,
-        opacity: 0,
-        duration: 0.7,
-        ease: 'power2.out',
-        stagger: 0.09,
-        scrollTrigger: { trigger: '[data-kopf]', start: 'top 78%' },
+      const ziele = gsap.utils.toArray<HTMLElement>(
+        '[data-auftakt] > *, [data-kopf] > *, [data-anim]',
+      )
+      if (!ziele.length) return
+
+      gsap.set(ziele, { opacity: 0, y: 32 })
+
+      /* Ein Auslöser je Element statt einer je Zeile.
+         Mit einem Auslöser pro Zeile startet die Animation, sobald die
+         Zeilenoberkante auftaucht — Bausteine am unteren Ende einer 700 px
+         hohen Zeile wären dann längst durchgelaufen, bevor man sie sieht.
+         `batch` fasst zusammen, was gemeinsam ins Bild kommt, und staffelt
+         nur diese; alles Übrige wartet, bis es selbst sichtbar wird.
+
+         Bewegt werden ausschließlich innere Bausteine, nie das <article>:
+         es ist Sprungziel der Hero-Links, und ein Versatz darauf würde den
+         Browser die verschobene Position anspringen lassen — die Zeile käme
+         anschließend unter der Kopfzeile zu liegen. */
+      ScrollTrigger.batch(ziele, {
+        // 88 % Viewporthöhe: das Element steht bereits im Bild, wenn es losläuft.
+        start: 'top 88%',
+        onEnter: (els) =>
+          gsap.to(els, {
+            opacity: 1,
+            y: 0,
+            duration: 0.75,
+            ease: 'power2.out',
+            stagger: 0.09,
+            overwrite: true,
+          }),
       })
 
-      // Pro Zeile die inneren Bausteine gestaffelt einblenden. Bewusst NICHT
-      // das <article> selbst bewegen: es ist Sprungziel der Hero-Links, und ein
-      // Versatz darauf würde den Browser die verschobene Position anspringen
-      // lassen — die Zeile käme anschließend unter der Kopfzeile zu liegen.
-      gsap.utils.toArray<HTMLElement>('[data-zeile]').forEach((zeile) => {
-        gsap.from(zeile.querySelectorAll('[data-anim]'), {
-          y: 34,
-          opacity: 0,
-          duration: 0.75,
-          ease: 'power2.out',
-          stagger: 0.1,
-          scrollTrigger: { trigger: zeile, start: 'top 74%' },
-        })
-      })
+      // Die Zeilenbilder liegen auf `loading="lazy"`. Kommen sie verspätet an,
+      // verschieben sich die Messpunkte — ohne Neuberechnung bliebe weiter
+      // unten etwas unsichtbar stehen.
+      const neuMessen = () => ScrollTrigger.refresh()
+      window.addEventListener('load', neuMessen)
+      return () => window.removeEventListener('load', neuMessen)
     }, root)
 
     return () => ctx.revert()
   }, [])
 
   return (
-    <section
-      id="leistungen"
-      ref={root}
-      tabIndex={-1}
-      className="relative overflow-hidden bg-forest-950 py-24 lg:py-32"
-    >
-      {/* Lichtkegel unten links */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -bottom-52 -left-52 h-[620px] w-[620px] rounded-full opacity-[.13] blur-3xl"
-        style={{ background: 'radial-gradient(circle,#AAC527 0%,transparent 68%)' }}
-      />
+    <section id="leistungen" ref={root} tabIndex={-1} className="relative">
+      {/* Übergang hell → dunkel, gespiegelt zum Band vor „Über uns“. Ohne ihn
+          stößt das helle Leistungsband hart auf die dunkle Section. */}
+      <div className="h-16 fade-to-dark lg:h-24" aria-hidden="true" />
 
-      <div className="shell relative">
-        {/* Kopf: Regler links, Einordnung rechts */}
+      <div className="relative overflow-hidden bg-forest-950 pb-24 pt-4 lg:pb-32">
+        {/* Lichtkegel unten links */}
         <div
-          data-kopf
-          className="grid gap-10 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] lg:items-center lg:gap-16"
-        >
-          <VorherNachher />
+          aria-hidden="true"
+          className="pointer-events-none absolute -bottom-52 -left-52 h-[620px] w-[620px] rounded-full opacity-[.13] blur-3xl"
+          style={{ background: 'radial-gradient(circle,#AAC527 0%,transparent 68%)' }}
+        />
 
-          <div>
-            <p className="eyebrow text-white/60">Was wir machen</p>
-            <h2 className="display mt-5 text-[clamp(1.7rem,4.6vw,3.4rem)] h-gradient">
-              Vom Rohbau zum
-              <br />
-              fertigen Raum
-            </h2>
-            <p className="mt-6 text-[16px] leading-relaxed text-white/70 sm:text-[17.5px]">
-              Vom Innenausbau über die Badsanierung bis zu Außenanlagen und Erdarbeiten: Wallner Bau
-              &amp; Garten bringt Team, Gerät und Erfahrung mit, um Ihr Projekt sauber zu Ende zu
-              bringen. Zu jeder Leistung steht hier, was wir übernehmen und wie wir vorgehen.
+        <div className="shell relative">
+          {/* Sectionmarke: Überschrift über dünnem grünen Trennstrich */}
+          <div data-auftakt className="pb-14 pt-12 lg:pb-20 lg:pt-16">
+            <p className="text-[11px] font-bold uppercase tracking-[0.26em] text-lime">
+              Unsere Leistungen
             </p>
-            <a href="#kontakt" className="btn-primary mt-8 w-fit">
-              Projekt besprechen
-              <IconArrow className="h-4 w-4" />
-            </a>
+            <div
+              aria-hidden="true"
+              className="mt-4 h-px w-full"
+              style={{
+                background:
+                  'linear-gradient(90deg, rgba(170,197,39,.85) 0%, rgba(170,197,39,.35) 55%, rgba(170,197,39,0) 100%)',
+              }}
+            />
           </div>
-        </div>
 
-        {/* Die sechs Leistungen, jede in eigener Anordnung */}
-        <div className="mt-20 lg:mt-28">
-          {leistungen.map((l, i) => {
-            const Anordnung = ANORDNUNGEN[i % ANORDNUNGEN.length]
-            return (
-              <article
-                key={l.slug}
-                id={`leistung-${l.slug}`}
-                data-zeile
-                className="scroll-mt-[104px] border-t border-white/[.08] py-14 first:border-t-0 first:pt-0 lg:scroll-mt-[124px] lg:py-20 lg:first:pt-0"
-              >
-                <Anordnung l={l} i={i} />
-              </article>
-            )
-          })}
+          {/* Kopf: Regler links, Einordnung rechts */}
+          <div
+            data-kopf
+            className="grid gap-10 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] lg:items-center lg:gap-16"
+          >
+            <VorherNachher />
+
+            <div>
+              <h2 className="display text-[clamp(1.7rem,4.6vw,3.4rem)] h-gradient">
+                Vom Rohbau zum
+                <br />
+                fertigen Raum
+              </h2>
+              <p className="mt-6 text-[16px] leading-relaxed text-white/70 sm:text-[17.5px]">
+                Vom Innenausbau über die Badsanierung bis zu Außenanlagen und Erdarbeiten: Wallner
+                Bau &amp; Garten bringt Team, Gerät und Erfahrung mit, um Ihr Projekt sauber zu
+                Ende zu bringen. Zu jeder Leistung steht hier, was wir übernehmen und wie wir
+                vorgehen.
+              </p>
+              <a href="#kontakt" className="btn-primary mt-8 w-fit">
+                Projekt besprechen
+                <IconArrow className="h-4 w-4" />
+              </a>
+            </div>
+          </div>
+
+          {/* Die sechs Leistungen, jede in eigener Anordnung */}
+          <div className="mt-20 lg:mt-28">
+            {leistungen.map((l, i) => {
+              const Anordnung = ANORDNUNGEN[i % ANORDNUNGEN.length]
+              return (
+                <article
+                  key={l.slug}
+                  id={`leistung-${l.slug}`}
+                  className="scroll-mt-[104px] border-t border-white/[.08] py-14 first:border-t-0 first:pt-0 lg:scroll-mt-[124px] lg:py-20 lg:first:pt-0"
+                >
+                  <Anordnung l={l} i={i} />
+                </article>
+              )
+            })}
+          </div>
         </div>
       </div>
     </section>
