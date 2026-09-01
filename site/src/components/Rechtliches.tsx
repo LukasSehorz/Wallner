@@ -1,13 +1,22 @@
 import { firma } from '../content'
 
 /**
- * Impressum und Datenschutzerklärung — Pflichtangaben, wortgleich von der
- * Bestandsseite übernommen. Als <details> ausgeführt, damit die Einseiter-
- * Struktur erhalten bleibt und die Inhalte trotzdem verlinkbar sind.
+ * Impressum und Datenschutzerklärung.
  *
- * TODO Kunde: Die Datenschutzerklärung nennt IONOS als Hoster. Nach dem Umzug
- * auf den neuen Hoster muss Abschnitt 4 angepasst werden.
+ * Die Pflichtangaben stammen wörtlich von bau-firma.com/impressum. Ergänzt sind
+ * nur Abschnitte, die dort fehlen und für den Betrieb dieser Seite nötig sind.
+ * Bewusst NICHT ergänzt: Handelsregister, Handwerkskammer und Aufsichtsbehörde —
+ * dazu liegen keine belegten Angaben vor, und erfundene Registerdaten wären im
+ * Impressum schlimmer als eine Lücke. Siehe offene Punkte in der README.
+ *
+ * Stand der Datenschutzerklärung: die Seite läuft auf Netlify, bindet keinerlei
+ * Dienste Dritter ein (Schriften liegen lokal unter /fonts) und setzt keine
+ * Cookies. Das Kontaktformular überträgt nichts an einen Server, sondern öffnet
+ * eine vorbereitete E-Mail im Mailprogramm der Besucherin. Ändert sich eines
+ * dieser drei Dinge, müssen die Abschnitte 4, 5 und 6 angepasst werden.
  */
+const STAND = 'September 2026'
+
 export default function Rechtliches() {
   const h = 'display mt-6 text-xl text-white first:mt-0'
   const p = 'mt-2 text-[13.5px] leading-relaxed text-white/70 [overflow-wrap:anywhere]'
@@ -36,15 +45,12 @@ export default function Rechtliches() {
           </summary>
 
           <div className="mt-6 border-t border-white/10 pt-6">
-            <h3 className={h}>Vertreten durch</h3>
+            <h3 className={h}>Angaben gemäß § 5 DDG</h3>
             <p className={p}>
               {firma.legal}
               <br />
-              {firma.inhaber}
-            </p>
-
-            <h3 className={h}>Büroanschrift</h3>
-            <p className={p}>
+              Inhaber: {firma.inhaber}
+              <br />
               {firma.strasse}
               <br />
               {firma.plzOrt}
@@ -52,14 +58,14 @@ export default function Rechtliches() {
 
             <h3 className={h}>Kontakt</h3>
             <p className={p}>
-              E-Mail:{' '}
-              <a href={`mailto:${firma.email}`} className="text-lime underline">
-                {firma.email}
-              </a>
-              <br />
               Telefon:{' '}
               <a href={firma.telefonHref} className="text-lime underline">
                 {firma.telefon}
+              </a>
+              <br />
+              E-Mail:{' '}
+              <a href={`mailto:${firma.email}`} className="text-lime underline">
+                {firma.email}
               </a>
             </p>
 
@@ -68,11 +74,42 @@ export default function Rechtliches() {
               Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz: {firma.ustId}
             </p>
 
-            <h3 className={h}>Information gemäß § 36 VSBG</h3>
+            <h3 className={h}>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h3>
+            <p className={p}>
+              {firma.inhaber}
+              <br />
+              {firma.strasse}, {firma.plzOrt}
+            </p>
+
+            <h3 className={h}>Verbraucherstreitbeilegung</h3>
             <p className={p}>
               Gemäß § 36 VSBG (Verbraucherstreitbeilegungsgesetz) erklärt der Betreiber dieser
               Website: Wir sind weder bereit noch verpflichtet, an Streitbeilegungsverfahren vor
               einer Verbraucherschlichtungsstelle teilzunehmen.
+            </p>
+
+            <h3 className={h}>Haftung für Inhalte</h3>
+            <p className={p}>
+              Als Diensteanbieter sind wir gemäß § 7 Abs. 1 DDG für eigene Inhalte auf diesen Seiten
+              nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 DDG sind wir als
+              Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde
+              Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige
+              Tätigkeit hinweisen. Verpflichtungen zur Entfernung oder Sperrung der Nutzung von
+              Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine
+              diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten
+              Rechtsverletzung möglich. Bei Bekanntwerden entsprechender Rechtsverletzungen werden
+              wir diese Inhalte umgehend entfernen.
+            </p>
+
+            <h3 className={h}>Haftung für Links</h3>
+            <p className={p}>
+              Unser Angebot enthält gegebenenfalls Links zu externen Websites Dritter, auf deren
+              Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch
+              keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige
+              Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum
+              Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft, rechtswidrige Inhalte
+              waren zu diesem Zeitpunkt nicht erkennbar. Bei Bekanntwerden von Rechtsverletzungen
+              werden wir derartige Links umgehend entfernen.
             </p>
 
             <h3 className={h}>Urheberrecht</h3>
@@ -109,72 +146,96 @@ export default function Rechtliches() {
           <div className="mt-6 border-t border-white/10 pt-6">
             <h3 className={h}>1. Verantwortlicher</h3>
             <p className={p}>
-              Wallner Bau und Garten, Inhaber: {firma.inhaber}
+              {firma.legal}, Inhaber: {firma.inhaber}
               <br />
-              Büroanschrift: {firma.strasse}, {firma.plzOrt}
+              {firma.strasse}, {firma.plzOrt}
               <br />
               Telefon: {firma.telefon} · E-Mail: {firma.email}
             </p>
 
             <h3 className={h}>2. Allgemeines zur Datenverarbeitung</h3>
             <p className={p}>
-              Wir nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Ihre personenbezogenen Daten
-              werden vertraulich und entsprechend der gesetzlichen Datenschutzvorschriften (DSGVO)
-              sowie dieser Datenschutzerklärung behandelt.
+              Wir nehmen den Schutz Ihrer personenbezogenen Daten ernst. Ihre Daten werden
+              vertraulich und entsprechend der Datenschutz-Grundverordnung (DSGVO), dem
+              Bundesdatenschutzgesetz sowie dieser Datenschutzerklärung behandelt. Die Übertragung
+              dieser Website erfolgt durchgehend verschlüsselt über HTTPS (TLS).
             </p>
 
-            <h3 className={h}>3. Erhebung und Speicherung personenbezogener Daten</h3>
+            <h3 className={h}>3. Server-Logfiles</h3>
             <p className={p}>
-              Beim Aufrufen unserer Website werden durch den Hostinganbieter automatisch
-              Informationen erhoben und in sogenannten Server-Logfiles gespeichert: IP-Adresse, Datum
-              und Uhrzeit der Anfrage, Browsertyp und -version, Betriebssystem, Referrer-URL sowie
-              der Hostname des zugreifenden Rechners. Diese Daten dienen der Gewährleistung eines
-              reibungslosen Verbindungsaufbaus und der Systemsicherheit. Rechtsgrundlage: Art. 6
-              Abs. 1 lit. f DSGVO.
+              Beim Aufruf dieser Website werden durch den Hostinganbieter automatisch Informationen
+              in sogenannten Server-Logfiles erfasst: IP-Adresse, Datum und Uhrzeit der Anfrage,
+              Browsertyp und -version, Betriebssystem, Referrer-URL sowie die Bezeichnung der
+              abgerufenen Datei. Diese Daten dienen dem technisch fehlerfreien Betrieb und der
+              Sicherheit der Website. Sie werden nicht mit anderen Datenquellen zusammengeführt und
+              nicht zur Analyse des Nutzungsverhaltens verwendet. Rechtsgrundlage ist unser
+              berechtigtes Interesse an einem sicheren und störungsfreien Betrieb nach Art. 6 Abs. 1
+              lit. f DSGVO.
             </p>
 
             <h3 className={h}>4. Hosting</h3>
             <p className={p}>
-              Unsere Website wird bei der IONOS SE gehostet. IONOS verarbeitet die Daten nur im
-              Rahmen einer Auftragsverarbeitung gemäß Art. 28 DSGVO.
+              Diese Website wird von Netlify, Inc., San Francisco, Kalifornien, USA, gehostet.
+              Netlify verarbeitet die unter Punkt 3 genannten Daten ausschließlich in unserem
+              Auftrag als Auftragsverarbeiter nach Art. 28 DSGVO. Dabei können Daten in die USA
+              übermittelt werden. Netlify ist unter dem EU-US Data Privacy Framework zertifiziert;
+              für Übermittlungen in die USA besteht damit ein Angemessenheitsbeschluss der
+              Europäischen Kommission nach Art. 45 DSGVO. Ergänzend gelten die Standard­vertrags­klauseln
+              der EU-Kommission.
             </p>
 
             <h3 className={h}>5. Kontaktaufnahme</h3>
             <p className={p}>
-              Bei Kontaktaufnahme per Formular oder E-Mail werden Ihre Angaben (Name, E-Mail-Adresse,
-              Nachricht) zur Bearbeitung Ihrer Anfrage gespeichert. Rechtsgrundlage: Art. 6 Abs. 1
-              lit. b DSGVO. Bei telefonischer Kontaktaufnahme werden keine Daten ohne Ihre
-              Einwilligung gespeichert.
+              Das Kontaktformular auf dieser Website überträgt Ihre Eingaben nicht an einen Server.
+              Beim Absenden werden die eingegebenen Angaben in eine vorbereitete E-Mail übernommen,
+              die sich in Ihrem eigenen E-Mail-Programm öffnet — versendet wird sie erst durch Sie
+              selbst. Erst mit dem Versand erhalten wir Ihre Angaben und speichern sie zur
+              Bearbeitung Ihrer Anfrage. Dasselbe gilt für eine Kontaktaufnahme per E-Mail oder
+              Telefon. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO, soweit die Anfrage auf einen
+              Vertragsschluss zielt, sonst Art. 6 Abs. 1 lit. f DSGVO. Wir löschen die Daten, sobald
+              Ihre Anfrage abschließend bearbeitet ist und keine gesetzlichen Aufbewahrungsfristen
+              entgegenstehen.
             </p>
 
-            <h3 className={h}>6. Cookies</h3>
+            <h3 className={h}>6. Keine Cookies, kein Tracking</h3>
             <p className={p}>
-              Unsere Website verwendet Cookies. Cookies sind kleine Textdateien, die auf Ihrem
-              Endgerät gespeichert werden. Technisch notwendige Cookies dienen dem Betrieb der
-              Website, optionale Cookies werden nur mit Ihrer Einwilligung gesetzt. Rechtsgrundlage:
-              Art. 6 Abs. 1 lit. a DSGVO (Einwilligung) und Art. 6 Abs. 1 lit. f DSGVO (berechtigtes
-              Interesse).
+              Diese Website setzt keine Cookies und speichert keine Informationen auf Ihrem Endgerät.
+              Es findet keine Reichweitenmessung, keine Analyse Ihres Nutzungsverhaltens und kein
+              Profiling statt. Eine Einwilligung nach § 25 TDDDG ist deshalb nicht erforderlich —
+              aus diesem Grund fragt diese Website auch keine Cookie-Einwilligung ab.
             </p>
 
-            <h3 className={h}>7. Social-Media-Links</h3>
+            <h3 className={h}>7. Keine Dienste Dritter</h3>
             <p className={p}>
-              Unsere Website kann Links zu sozialen Netzwerken enthalten. Beim Anklicken dieser Links
-              gelten die Datenschutzbestimmungen der jeweiligen Anbieter. Es findet keine
-              automatische Datenübertragung beim bloßen Besuch unserer Website statt.
+              Diese Website bindet keine Inhalte Dritter ein. Insbesondere werden keine externen
+              Schriftarten, keine Kartendienste, keine Videoplattformen, keine Social-Media-Plugins
+              und keine Analysedienste geladen. Alle Schriften und Medien werden von unserem eigenen
+              Server ausgeliefert. Beim bloßen Besuch dieser Website wird daher keine Verbindung zu
+              Dritten aufgebaut und Ihre IP-Adresse an niemanden außer den unter Punkt 4 genannten
+              Hoster übermittelt. Sollten wir auf externe Profile verlinken, gelten dort die
+              Datenschutzbestimmungen des jeweiligen Anbieters — eine Datenübertragung findet erst
+              statt, wenn Sie einen solchen Link aktiv anklicken.
             </p>
 
-            <h3 className={h}>8. Rechte der betroffenen Personen</h3>
+            <h3 className={h}>8. Ihre Rechte</h3>
             <p className={p}>
-              Sie haben das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16 DSGVO),
-              Löschung (Art. 17 DSGVO), Einschränkung der Verarbeitung (Art. 18 DSGVO),
-              Datenübertragbarkeit (Art. 20 DSGVO) und Widerspruch (Art. 21 DSGVO). Außerdem haben
-              Sie das Recht auf Beschwerde bei einer Datenschutzaufsichtsbehörde.
+              Sie haben jederzeit das Recht auf Auskunft über die zu Ihrer Person gespeicherten Daten
+              (Art. 15 DSGVO), auf Berichtigung (Art. 16 DSGVO), auf Löschung (Art. 17 DSGVO), auf
+              Einschränkung der Verarbeitung (Art. 18 DSGVO), auf Datenübertragbarkeit (Art. 20
+              DSGVO) sowie auf Widerspruch gegen die Verarbeitung (Art. 21 DSGVO). Eine erteilte
+              Einwilligung können Sie jederzeit mit Wirkung für die Zukunft widerrufen. Wenden Sie
+              sich dazu formlos an die unter Punkt 1 genannten Kontaktdaten.
             </p>
 
-            <h3 className={h}>9. Widerruf Ihrer Einwilligung</h3>
+            <h3 className={h}>9. Beschwerderecht</h3>
             <p className={p}>
-              Sie können eine bereits erteilte Einwilligung jederzeit mit Wirkung für die Zukunft
-              widerrufen.
+              Unbeschadet anderer Rechtsbehelfe steht Ihnen ein Beschwerderecht bei einer
+              Datenschutz-Aufsichtsbehörde zu. Für uns zuständig ist das Bayerische Landesamt für
+              Datenschutzaufsicht (BayLDA), Promenade 27, 91522 Ansbach.
+            </p>
+
+            <p className="mt-8 border-t border-white/10 pt-4 text-[12px] text-white/45">
+              Stand: {STAND}
             </p>
           </div>
         </details>

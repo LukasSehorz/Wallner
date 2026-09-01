@@ -264,7 +264,11 @@ export default function Kontakt() {
                 <span>
                   Ich bin damit einverstanden, dass diese Daten zum Zweck der Kontaktaufnahme
                   gespeichert und verarbeitet werden. Mir ist bekannt, dass ich meine Einwilligung
-                  jederzeit widerrufen kann. <span className="text-lime-dark">*</span>
+                  jederzeit widerrufen kann. Näheres in der{' '}
+                  <a href="#datenschutz" className="font-semibold text-lime-dark underline">
+                    Datenschutzerklärung
+                  </a>
+                  . <span className="text-lime-dark">*</span>
                 </span>
               </label>
 

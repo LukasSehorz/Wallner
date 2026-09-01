@@ -88,11 +88,14 @@ Sobald die echten Rezensionen vorliegen: Name, Text und Sternezahl eintragen,
 abgeleitet und nicht vom Kunden bestätigt, deshalb steht `orteBestaetigt` auf `false` und die
 Ortsangabe wird ausgelassen. Nach Rückmeldung: Orte korrigieren, Flag auf `true`.
 
-### 3. Hero-Video Desktop fehlt
-Der vorhandene Clip ist hochkant (720×1280) und läuft deshalb nur auf Mobilgeräten.
-Für Desktop fehlt ein 16:9-Clip. Sobald er vorliegt: Pfad in `src/components/Hero.tsx`
-in `HERO_VIDEO_16x9` eintragen — sonst nichts ändern, die Bildschleife wird automatisch
-ersetzt.
+### 3. Hero-Video Desktop — nicht mehr nötig, Hinweis nur zur Einordnung
+**Erledigt bzw. gegenstandslos.** Der Desktop-Hero zeigt seit September 2026 den
+Vorher/Nachher-Reveal (`hero-vorher-rohbau.jpg` → `hero-nachher-fertig.jpg`) statt einer
+Bildschleife; `HERO_VIDEO_16x9` gibt es in `Hero.tsx` nicht mehr. Der vorhandene
+Hochkant-Clip (720×1280) läuft weiterhin auf Mobilgeräten.
+
+Wer den Desktop doch auf Bewegtbild umstellen will, braucht einen 16:9-Clip — dann aber
+den Reveal ersetzen, nicht danebenstellen. Rezept dafür:
 
 Erzeugt mit KIE AI, Modell `kling-3.0/video`, Bild-zu-Video aus dem echten Foto
 `wohnraum-holzlamellen-led.jpg`. Kosten laut API: **42 Credits für 3 Sekunden im
@@ -119,9 +122,23 @@ curl -X POST "https://api.kie.ai/api/v1/jobs/createTask" \
 vorausgefüllte E-Mail im Mailprogramm. Für den Livebetrieb ein Ziel eintragen
 (Formspree, Netlify Forms oder eigenes Skript).
 
-### 5. Hoster in der Datenschutzerklärung
-`src/components/Rechtliches.tsx`, Abschnitt 4 nennt IONOS. Nach dem Umzug auf den neuen
-Hoster anpassen.
+### 5. Impressum — fehlende Registerangaben beim Kunden erfragen
+`src/components/Rechtliches.tsx`. Das Impressum der Bestandsseite
+(bau-firma.com/impressum) enthält nur Firma, Inhaber, Anschrift, Kontakt und USt-IdNr.
+Offen und **bewusst nicht erfunden**:
+
+- **Handwerksrolle.** Trockenbau ist ein zulassungsfreies Handwerk (Anlage B1 HwO).
+  Ist der Betrieb in der Handwerksrolle eingetragen, gehören Kammer, Ort und die
+  Berufsbezeichnung samt verleihendem Staat ins Impressum (§ 5 Abs. 1 Nr. 5 DDG).
+- **Handelsregister.** Bei einem Einzelunternehmen ohne HR-Eintrag entfällt die Angabe.
+  Falls doch eingetragen: Registergericht und Nummer ergänzen.
+
+Erfundene Registerdaten wären im Impressum schlimmer als eine Lücke — deshalb steht dort
+derzeit nichts dazu. Nach Rückmeldung des Kunden ergänzen.
+
+Keine EU-Streitschlichtungs-Plattform verlinken: die OS-Plattform der EU-Kommission hat
+am 20.07.2025 den Betrieb eingestellt, ein Link ginge ins Leere. Die Erklärung nach
+§ 36 VSBG steht drin und genügt.
 
 ### 6. Domain in den Meta-Tags
 `index.html` — `og:image`, `og:url` und `canonical` zeigen auf
@@ -134,8 +151,22 @@ alle drei anpassen; relative OG-URLs lösen Facebook, LinkedIn und WhatsApp nich
   eingebunden über `src/fonts.css`. Beim Seitenaufruf geht keine Anfrage an Google — das
   wäre sonst ein Widerspruch zur eigenen Datenschutzerklärung und nach LG München I,
   3 O 17493/20 abmahnfähig.
-- **Keine Tracker.** Die Seite lädt nichts von Dritten. Der Cookie-Hinweis speichert die
-  Auswahl nur lokal in `localStorage`.
+- **Keine Tracker, kein Cookie-Banner.** Die Seite lädt nichts von Dritten, setzt keine
+  Cookies und schreibt nichts in `localStorage` oder `sessionStorage`. Im Browser
+  nachgemessen: 0 Fremdverbindungen, 0 Cookies, 0 Storage-Einträge nach vollständigem
+  Durchscrollen. Eine Einwilligung nach § 25 TDDDG ist damit nicht erforderlich, deshalb
+  gibt es bewusst **keinen** Cookie-Banner.
+
+  Der frühere `CookieHinweis.tsx` ist entfernt (Stand September 2026). Er bot eine Wahl
+  zwischen „alle" und „nur notwendige" Cookies, obwohl es weder die einen noch die anderen
+  gab, und legte als einzigen Speichereintrag seine eigene Wegklick-Notiz an.
+
+  **Wird später ein einwilligungspflichtiger Dienst eingebunden** — Google Maps, YouTube,
+  Google Fonts per CDN, Analytics, Meta-Pixel —, muss ein Banner zurück. Dann aber als
+  echte Sperre: der Dienst darf erst *nach* der Einwilligung geladen werden. Eine bloße
+  Hinweisleiste, die den Dienst trotzdem sofort lädt, erfüllt § 25 TDDDG nicht.
+  Gleichzeitig sind dann Abschnitt 6 und 7 der Datenschutzerklärung anzupassen — beide
+  behaupten derzeit ausdrücklich, dass es nichts dergleichen gibt.
 
 ## Schriftwahl
 

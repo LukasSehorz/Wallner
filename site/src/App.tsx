@@ -10,7 +10,21 @@ import Bewertungen from './components/Bewertungen'
 import Kontakt from './components/Kontakt'
 import Rechtliches from './components/Rechtliches'
 import Footer from './components/Footer'
-import CookieHinweis from './components/CookieHinweis'
+
+/*
+ * Kein Cookie-Banner: Diese Seite setzt keine Cookies und greift auf keine
+ * Informationen im Endgerät zu. Schriften und Medien liegen lokal, es sind
+ * keine Kartendienste, Videoplattformen, Social-Plugins oder Analysedienste
+ * eingebunden, und das Kontaktformular überträgt nichts an einen Server.
+ * Eine Einwilligung nach § 25 TDDDG ist damit nicht erforderlich.
+ *
+ * Der frühere Banner sprach von optionalen Cookies zur Nutzungsanalyse, die es
+ * nie gab, und legte als einzigen Speichereintrag seine eigene Wegklick-Notiz
+ * an. Wird später ein einwilligungspflichtiger Dienst eingebunden — Google
+ * Maps, YouTube, Analytics —, muss er zurück; dann aber mit echter Sperre vor
+ * dem Laden des Dienstes, nicht nur als Hinweisleiste.
+ */
+
 
 export default function App() {
   return (
@@ -36,7 +50,6 @@ export default function App() {
         <Rechtliches />
       </main>
       <Footer />
-      <CookieHinweis />
     </>
   )
 }
