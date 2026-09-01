@@ -2,6 +2,7 @@ import Nav from './components/Nav'
 import Hero from './components/Hero'
 import Leistungsband from './components/Leistungsband'
 import Leistungen from './components/Leistungen'
+import LeistungenDetail from './components/LeistungenDetail'
 import UeberUns from './components/UeberUns'
 import Projekte from './components/Projekte'
 import Galerie from './components/Galerie'
@@ -27,6 +28,7 @@ export default function App() {
         <Hero />
         <Leistungsband />
         <Leistungen />
+        <LeistungenDetail />
         <UeberUns />
         <Projekte />
         <Galerie />
