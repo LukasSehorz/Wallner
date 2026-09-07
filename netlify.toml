@@ -7,7 +7,9 @@
 [build.environment]
   NODE_VERSION = "22"
 
-# One-pager ohne Router: alle unbekannten Pfade auf die Startseite.
+# Der Router laeuft im Browser (src/router.tsx). Damit echte URLs wie
+# /leistungen/trockenbau auch beim direkten Aufruf und beim Teilen des Links
+# funktionieren, muss jeder Pfad dieselbe index.html bekommen.
 [[redirects]]
   from = "/*"
   to = "/index.html"

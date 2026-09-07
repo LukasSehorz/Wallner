@@ -1,11 +1,19 @@
 import { useEffect, useRef, useState } from 'react'
 import { firma, nav } from '../content'
+import { Link, useRoute } from '../router'
 import { IconClose, IconMenu, IconPhone } from './icons'
+
+/** '/#ueber-uns' → '/' — für den Abgleich mit dem aktuellen Pfad. */
+function pfadVon(href: string) {
+  const p = href.split('#')[0]
+  return p === '' ? '/' : p
+}
 
 export default function Nav() {
   const [open, setOpen] = useState(false)
   const [solid, setSolid] = useState(false)
   const burger = useRef<HTMLButtonElement>(null)
+  const { pfad } = useRoute()
 
   useEffect(() => {
     const onScroll = () => setSolid(window.scrollY > 40)
@@ -13,6 +21,10 @@ export default function Nav() {
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  // Nach einem Seitenwechsel muss das mobile Menü zu sein, sonst steht man auf
+  // der neuen Seite hinter einem offenen Panel.
+  useEffect(() => setOpen(false), [pfad])
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
@@ -31,6 +43,12 @@ export default function Nav() {
     }
   }, [open])
 
+  const aktiv = (href: string) => {
+    const ziel = pfadVon(href)
+    if (ziel === '/') return pfad === '/' && !href.includes('#')
+    return pfad === ziel || pfad.startsWith(ziel + '/')
+  }
+
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
@@ -38,7 +56,7 @@ export default function Nav() {
       }`}
     >
       <div className="shell flex h-[86px] items-center justify-between gap-6 sm:h-[104px]">
-        <a href="#start" className="shrink-0" aria-label={`${firma.name} — zur Startseite`}>
+        <Link to="/" className="shrink-0" aria-label={`${firma.name} — zur Startseite`}>
           <img
             src="/logo/logo.png"
             alt={`${firma.name} Logo`}
@@ -46,17 +64,20 @@ export default function Nav() {
             height={568}
             className="h-[52px] w-auto sm:h-[74px]"
           />
-        </a>
+        </Link>
 
-        <nav className="hidden items-center gap-10 lg:flex" aria-label="Hauptnavigation">
+        <nav className="hidden items-center gap-9 lg:flex" aria-label="Hauptnavigation">
           {nav.map((n) => (
-            <a
+            <Link
               key={n.href}
-              href={n.href}
-              className="font-display text-[19px] font-bold uppercase tracking-[0.08em] text-white/90 transition-colors hover:text-lime"
+              to={n.href}
+              aria-current={aktiv(n.href) ? 'page' : undefined}
+              className={`font-display text-[19px] font-bold uppercase tracking-[0.08em] transition-colors hover:text-lime ${
+                aktiv(n.href) ? 'text-lime' : 'text-white/90'
+              }`}
             >
               {n.label}
-            </a>
+            </Link>
           ))}
           <a
             href={firma.telefonHref}
@@ -86,19 +107,22 @@ export default function Nav() {
         inert={!open}
         aria-hidden={!open}
         className={`overflow-hidden border-t border-white/10 bg-forest-950 transition-[max-height] duration-300 lg:hidden ${
-          open ? 'max-h-[420px]' : 'max-h-0'
+          open ? 'max-h-[480px]' : 'max-h-0'
         }`}
       >
         <nav className="shell flex flex-col gap-1 py-5" aria-label="Mobile Navigation">
           {nav.map((n) => (
-            <a
+            <Link
               key={n.href}
-              href={n.href}
+              to={n.href}
               onClick={() => setOpen(false)}
-              className="rounded-lg px-3 py-3 font-display font-bold text-2xl uppercase tracking-wide text-white/90 transition-colors hover:bg-white/5 hover:text-lime"
+              aria-current={aktiv(n.href) ? 'page' : undefined}
+              className={`rounded-lg px-3 py-3 font-display font-bold text-2xl uppercase tracking-wide transition-colors hover:bg-white/5 hover:text-lime ${
+                aktiv(n.href) ? 'text-lime' : 'text-white/90'
+              }`}
             >
               {n.label}
-            </a>
+            </Link>
           ))}
           <a
             href={firma.telefonHref}

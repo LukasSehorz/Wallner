@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { firma, zeiten } from '../content'
+import { Link } from '../router'
 import { IconClock, IconMail, IconPhone, IconPin } from './icons'
 
 /**
@@ -75,7 +76,7 @@ export default function Kontakt() {
 
       <div className="shell relative grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
         {/* Links */}
-        <div className="card-dark flex flex-col p-8 sm:p-11">
+        <div data-reveal className="card-dark flex flex-col p-8 sm:p-11">
           <p className="eyebrow text-white/60">Ihr Projekt startet hier</p>
 
           <h2 className="display mt-5 text-[clamp(1.7rem,4.9vw,3.75rem)] h-gradient">
@@ -153,7 +154,7 @@ export default function Kontakt() {
         </div>
 
         {/* Rechts — Formular */}
-        <div className="rounded-2xl bg-white p-8 shadow-plate sm:p-11">
+        <div data-reveal className="rounded-2xl bg-white p-8 shadow-plate sm:p-11">
           <h3 className="display text-[clamp(1.65rem,3.3vw,2.45rem)] text-moss-900">Anfrage senden</h3>
           <p className="mt-3 text-[14px] text-moss-900/75">
             Wir melden uns in der Regel innerhalb eines Werktags bei Ihnen zurück.
@@ -265,9 +266,12 @@ export default function Kontakt() {
                   Ich bin damit einverstanden, dass diese Daten zum Zweck der Kontaktaufnahme
                   gespeichert und verarbeitet werden. Mir ist bekannt, dass ich meine Einwilligung
                   jederzeit widerrufen kann. Näheres in der{' '}
-                  <a href="#datenschutz" className="font-semibold text-lime-dark underline">
+                  <Link
+                    to="/rechtliches#datenschutz"
+                    className="font-semibold text-lime-dark underline"
+                  >
                     Datenschutzerklärung
-                  </a>
+                  </Link>
                   . <span className="text-lime-dark">*</span>
                 </span>
               </label>

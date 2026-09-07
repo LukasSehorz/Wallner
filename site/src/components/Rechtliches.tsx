@@ -28,7 +28,7 @@ export default function Rechtliches() {
       </div>
 
       <div className="shell mt-8 grid gap-4 lg:grid-cols-2">
-        <details id="impressum" className="group min-w-0 rounded-2xl border border-white/10 bg-white/[.03] p-6 sm:p-8">
+        <details id="impressum" open className="group min-w-0 scroll-mt-[104px] rounded-2xl border border-white/10 bg-white/[.03] p-6 sm:p-8">
           <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-1.5">
             <h2 className="display text-2xl text-white [overflow-wrap:anywhere] sm:text-3xl">Impressum</h2>
             <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-white/25 text-white transition-transform group-open:rotate-45">
@@ -127,7 +127,7 @@ export default function Rechtliches() {
           </div>
         </details>
 
-        <details id="datenschutz" className="group min-w-0 rounded-2xl border border-white/10 bg-white/[.03] p-6 sm:p-8">
+        <details id="datenschutz" open className="group min-w-0 scroll-mt-[104px] rounded-2xl border border-white/10 bg-white/[.03] p-6 sm:p-8">
           <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-1.5">
             <h2 className="display text-2xl text-white [overflow-wrap:anywhere] sm:text-3xl">Datenschutzerklärung</h2>
             <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-white/25 text-white transition-transform group-open:rotate-45">

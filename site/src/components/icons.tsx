@@ -1,3 +1,5 @@
+import type { ReactElement } from 'react'
+
 /** Einheitliches SVG-Icon-Set — 1.6px Strichstärke, 24×24 Grid. */
 type P = { className?: string }
 
@@ -58,6 +60,24 @@ export const IconTrockenbau = ({ className }: P) => (
   <svg viewBox="0 0 24 24" className={className ?? base} aria-hidden="true">
     <path {...stroke} d="M4 4h16v16H4z" />
     <path {...stroke} d="M4 12h16M12 4v16" />
+  </svg>
+)
+
+/* Schraege Dachflaeche mit eingesetztem Fenster. Die naheliegende Variante —
+   Dreieck mit kleinem Dreieck darin — sieht bei 20 px wie ein Warnschild aus. */
+export const IconDachfenster = ({ className }: P) => (
+  <svg viewBox="0 0 24 24" className={className ?? base} aria-hidden="true">
+    <path {...stroke} d="M4 20 9.2 4.8H20L14.8 20z" />
+    <path {...stroke} d="M9 16.6l2.6-8h5.1l-2.6 8z" />
+    <path {...stroke} d="m10 13.6 5.1-2" />
+  </svg>
+)
+
+export const IconTuer = ({ className }: P) => (
+  <svg viewBox="0 0 24 24" className={className ?? base} aria-hidden="true">
+    <path {...stroke} d="M6 21V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v17" />
+    <path {...stroke} d="M4 21h16" />
+    <circle {...stroke} cx="14.6" cy="12.4" r=".9" />
   </svg>
 )
 
@@ -145,11 +165,16 @@ export const IconChevronRight = ({ className }: P) => (
   </svg>
 )
 
-export const leistungsIcons = [
-  IconInnenausbau,
-  IconSanierung,
-  IconBad,
-  IconGarten,
-  IconBagger,
-  IconTrockenbau,
-]
+/**
+ * Zuordnung Leistung -> Icon ueber den Slug. Frueher war das ein Array in der
+ * Reihenfolge der Leistungen; nachdem der Kunde die Liste umgestellt hat, waren
+ * die Icons stillschweigend verrutscht. Ueber den Slug kann das nicht passieren.
+ */
+export const leistungsIcons: Record<string, (p: P) => ReactElement> = {
+  trockenbau: IconTrockenbau,
+  innenausbau: IconInnenausbau,
+  sanierung: IconSanierung,
+  dachflaechenfenster: IconDachfenster,
+  tueren: IconTuer,
+  aussenanlagen: IconGarten,
+}

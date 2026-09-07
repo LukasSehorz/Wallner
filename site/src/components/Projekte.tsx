@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { orteBestaetigt, projekte } from '../content'
+import { Link } from '../router'
 import { IconArrow } from './icons'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -30,13 +31,12 @@ export default function Projekte() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
     const ctx = gsap.context(() => {
-      gsap.from('[data-head]', {
+      gsap.from('[data-kopf]', {
         y: 26,
         opacity: 0,
         duration: 0.7,
         ease: 'power2.out',
-        stagger: 0.08,
-        scrollTrigger: { trigger: el, start: 'top 78%' },
+        scrollTrigger: { trigger: el, start: 'top 82%' },
       })
 
       // Kein Verkleinern der überdeckten Karte: J Davis hat das nicht, und es
@@ -51,7 +51,7 @@ export default function Projekte() {
     <section
       id="projekte"
       ref={root}
-      className="relative bg-forest-900 pb-24 pt-14 lg:pb-32 lg:pt-20"
+      className="relative bg-forest-900 pb-20 pt-14 lg:pb-24 lg:pt-20"
     >
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div
@@ -61,32 +61,24 @@ export default function Projekte() {
       </div>
 
       <div className="shell relative">
-        <div className="grid gap-8 lg:grid-cols-[1.25fr_1fr] lg:items-end">
-          <div data-head>
-            <p className="eyebrow text-white/65">Projektarbeit</p>
-            <h2 className="display mt-5 text-[clamp(1.7rem,4.9vw,3.75rem)] h-gradient">
-              Abgeschlossene
-              <br />
-              Projekte.
-            </h2>
-          </div>
-          <p data-head className="text-[17px] leading-relaxed text-white/75 lg:pb-3 lg:text-[19px]">
-            Ein Blick auf Räume, Bäder, Terrassen und Erdarbeiten, die wir für unsere Kundinnen und
-            Kunden umgesetzt haben — vom ersten Aufmaß bis zur Übergabe.
-          </p>
+        <div data-kopf>
+          <p className="eyebrow text-white/65">Referenzen</p>
+          <h2 className="display mt-5 text-[clamp(1.6rem,3.8vw,2.6rem)] text-white">
+            Was wir gebaut haben.
+          </h2>
         </div>
 
         {/* Sticky-Stapel: alle Karten kleben auf derselben Höhe, die spätere
             legt sich über die frühere. `motion-reduce` löst den Stapel auf. */}
-        <ul className="mt-14">
+        <ul className="mt-10">
           {projekte.map((p) => (
             <li
               key={p.titel}
               data-karte
               className="sticky top-[86px] motion-reduce:static sm:top-[104px]"
             >
-              <a
-                href="#kontakt"
+              <Link
+                to="/kontakt"
                 className="group block bg-forest-900 pb-5 pt-6"
                 aria-label={`${p.titel}${orteBestaetigt ? `, ${p.ort}` : ''} — ${p.kategorie}. Projekt anfragen`}
               >
@@ -117,7 +109,7 @@ export default function Projekte() {
                     />
                   </div>
                 </div>
-              </a>
+              </Link>
             </li>
           ))}
         </ul>

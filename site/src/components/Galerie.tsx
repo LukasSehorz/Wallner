@@ -1,10 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { galerie } from '../content'
-import { IconArrow, IconChevronLeft, IconChevronRight, IconClose } from './icons'
+import { IconChevronLeft, IconChevronRight, IconClose } from './icons'
 
 /**
  * Galerie-Karussell nach BP-Marine-Vorbild: dunkle Platte, Zähler „04 / 19",
- * Pfeil-Buttons, Fortschrittsbalken und Lightbox. Darunter das CTA-Band.
+ * Pfeil-Buttons, Fortschrittsbalken und Lightbox.
+ *
+ * Steht seit dem Umbau auf der Projektseite; der Kontaktabsprung darunter ist
+ * jetzt das gemeinsame CTA-Band der Unterseiten.
  */
 export default function Galerie() {
   const track = useRef<HTMLUListElement>(null)
@@ -80,12 +83,12 @@ export default function Galerie() {
   }, [box])
 
   return (
-    <section className="relative overflow-hidden bg-forest-900 pb-14 lg:pb-20">
+    <section className="relative overflow-hidden bg-forest-900 pb-16 lg:pb-20">
       <div className="shell relative">
         {/* Platte */}
         <div className="rounded-[28px] border border-white/[.08] bg-gradient-to-b from-white/[.07] to-white/[.02] p-7 shadow-plate sm:p-10">
           <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
-            <div>
+            <div data-reveal>
               <p className="eyebrow text-white/60">Weitere Projektfotos</p>
               <h2 className="display mt-4 text-[clamp(1.7rem,4.9vw,3.75rem)] text-white">
                 Mehr Arbeit von der Baustelle
@@ -156,17 +159,6 @@ export default function Galerie() {
           </div>
         </div>
 
-        {/* CTA-Band */}
-        <div className="mt-6 flex flex-col gap-6 rounded-2xl border border-lime/25 bg-gradient-to-r from-lime/[.14] to-transparent p-7 sm:p-9 lg:flex-row lg:items-center lg:justify-between">
-          <p className="max-w-[720px] text-[17px] font-semibold leading-relaxed text-white">
-            Sie haben ein Projekt im Kopf — Innenausbau, Bad, Terrasse oder Erdarbeiten? Wir schauen
-            uns die Baustelle an und sagen Ihnen ehrlich, was sinnvoll ist.
-          </p>
-          <a href="#kontakt" className="btn-primary shrink-0">
-            Projekt starten
-            <IconArrow className="h-4 w-4" />
-          </a>
-        </div>
       </div>
 
       {/* Lightbox */}

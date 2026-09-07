@@ -3,11 +3,17 @@
 Neue Website für Wallner Bau & Garten Trockenbau (Matthias Wallner, Niedertaufkirchen).
 Ersetzt die Bestandsseite unter bau-firma.com / wallner-bau-und-garten.de.
 
-**Design-Vorgabe:** Struktur und Optik eins zu eins nach
+**Design-Vorgabe:** Formensprache, Farben und Typografie nach
 [bpmarineconstruction.com](https://bpmarineconstruction.com/), Markenfarbe Grün statt Blau.
-Zwei Sections folgen [jdavisgc.com](https://jdavisgc.com/): die Projekt-Referenzen mit der
-„Featured Projects"-Scroll-Mechanik und „Wir bauen für die Besten" mit Kennzahlen-Laufband
-und großem Zitat (bei uns die Google-Bewertungen).
+Die Projekt-Referenzen übernehmen die „Featured Projects"-Scroll-Mechanik von
+[jdavisgc.com](https://jdavisgc.com/).
+
+**Stand 07.09.2026 — Umbau nach Kundenrückmeldung.** Der Kunde fand die erste Fassung als
+Einzelseite zu voll: „das ist für ältere viel zu viel Information". Die Seite ist deshalb
+aufgeteilt (siehe [Seitenstruktur](#seitenstruktur)). Der Aufbau der Startseite ab dem Hero
+folgt jetzt der vom Kunden genannten Referenz [conprobau.de](https://www.conprobau.de/#leistungen):
+Leistungen als schlichtes Icon-Raster ohne Beschreibung, danach Über uns, Projektanriss,
+Google-Bewertungen und Kontakt in Kurzform. Der Hero behält den Vorher/Nachher-Reveal.
 
 ## Starten
 
@@ -19,31 +25,63 @@ npm run build    # Produktionsbuild nach site/dist
 npm run preview  # Build lokal prüfen
 ```
 
+## Seitenstruktur
+
+Bis September 2026 war das eine einzige Seite mit Sprungmarken. Nach der Kundenrückmeldung
+sind es echte Unterseiten:
+
+| Pfad | Inhalt |
+| --- | --- |
+| `/` | Hero (Vorher/Nachher-Reveal), Leistungen als Aufzählung, „Wer wir sind", Projektanriss, Google-Bewertungen, Kontakt in Kurzform |
+| `/leistungen` | Übersicht der sechs Leistungen |
+| `/leistungen/<slug>` | Ausführliche Beschreibung einer Leistung, Ablauf, Bilder, Kontaktknopf |
+| `/projekte` | Abgeschlossene Projekte und die komplette Bildergalerie |
+| `/kontakt` | Anfrageformular und alle Kontaktdaten |
+| `/rechtliches` | Impressum und Datenschutz (`/impressum` und `/datenschutz` führen dorthin) |
+
+Der Router steht in `src/router.tsx` und ist bewusst selbst geschrieben: rund 80 Zeilen über
+die History-API statt einer Router-Bibliothek samt Abhängigkeitsbaum. `netlify.toml` liefert
+für jeden Pfad dieselbe `index.html` aus, damit direkte Aufrufe und geteilte Links
+funktionieren. Titel, Beschreibung und Canonical setzt jede Seite über `src/seo.ts` selbst.
+
 ## Aufbau
 
 ```
 site/
   src/
     content.ts              ← ALLE Texte, Bildzuordnungen und Kontaktdaten an einer Stelle
-    index.css               ← Design-Tokens, Buttons, Eyebrow, Verlaufsbänder
+    router.tsx              Mini-Router über die History-API (Link, useRoute, Scrollverhalten)
+    anim.ts                 useReveal — Einblenden beim Hereinscrollen (GSAP ScrollTrigger)
+    seo.ts                  Titel, Description und Canonical je Seite
+    index.css               Design-Tokens, Buttons, Eyebrow, Verlaufsbänder
+    pages/
+      Start.tsx             Startseite — kurz gehalten, Aufbau nach conprobau.de
+      LeistungenUebersicht.tsx
+      LeistungSeite.tsx     Eine Leistung ausführlich (Kopf, Text, Ablauf, Bilder, CTA)
+      ProjekteSeite.tsx     Referenzen + Galerie
+      KontaktSeite.tsx      Formular und Kontaktdaten
+      RechtlichesSeite.tsx  Impressum und Datenschutz
+      NichtGefunden.tsx     404 mit Absprung auf die Leistungen
     components/
-      Nav.tsx               Sticky-Header mit Logo, wie BP Marine
-      Hero.tsx              Bewegtbild-Hero, Gradient-Headline, Pills
-      Leistungsband.tsx     Gewerke-Laufband (Ersatz für BPs Partnerlogo-Leiste)
-      Leistungen.tsx        Tab-Liste + Bild + Detailspalte
-      UeberUns.tsx          Bild mit Overlay-Karte, Kennzahlen, Textkarte
+      Nav.tsx               Sticky-Header mit Logo und aktiver Seitenmarkierung
+      Hero.tsx              Fertiger Raum, Lupe zeigt den Rohbau; Text-Auftakt beim Laden
+      LeistungenGrid.tsx    Die sechs Leistungen als Aufzählung mit Icon
+      WerWirSind.tsx        Kurzer Über-uns-Block mit Kennzahlen
+      ProjekteTeaser.tsx    Drei Bilder + Knopf auf /projekte
+      KontaktKurz.tsx       Telefon und E-Mail als große Schaltflächen
+      Seitenkopf.tsx        Gemeinsamer Kopfbereich der Unterseiten
+      CTABand.tsx           Kontaktabsprung am Ende jeder Unterseite
       Projekte.tsx          Referenzen als Sticky-Kartenstapel (J-Davis-Mechanik)
       Galerie.tsx           Karussell mit Zähler, Fortschritt und Lightbox
-      FuerDieBesten.tsx     Headline mit Marker + Kennzahlen-Laufband
-      Bewertungen.tsx       Google-Bewertungen im J-Davis-Zitatlayout
+      Bewertungen.tsx       Echte Google-Rezensionen als räumliches Banner mit Pfeilen
       Kontakt.tsx           Dunkle Infokarte + weißes Formular
-      Rechtliches.tsx       Impressum und Datenschutz (aufklappbar)
-      Footer.tsx            Footer mit Pflichtangaben
-      CookieHinweis.tsx     Cookie-Banner
+      Rechtliches.tsx       Impressum und Datenschutz
+      Footer.tsx            Footer mit Leistungsliste und Pflichtangaben
+      icons.tsx             SVG-Set, Leistungs-Icons über den Slug zugeordnet
   public/
     logo/logo.png           Freigestelltes Kundenlogo (transparent)
     bilder/                 19 echte Projektfotos der Bestandsseite
-    video/                  Hero-Video (Kling 3.0) + Poster
+    video/                  Hochkant-Clip (Kling 3.0) + Poster — derzeit ungenutzt
     og-wallner-...jpg       Social-Sharing-Bild, aus Logo und echtem Foto gesetzt
   index.html                Meta-Tags, Open Graph und JSON-LD (GeneralContractor)
 recherche/
@@ -73,29 +111,48 @@ Schriften wie bei der Referenz: **Teko** für Headlines (uppercase, enges Tracki
 
 ## Offene Punkte
 
-### 1. Google-Bewertungen — Platzhalter, im Livebuild ausgeblendet
+### 1. Google-Bewertungen — drin, aber drei Texte sind abgeschnitten
 `src/content.ts` → `bewertungen` und `bewertungenFreigegeben`.
 
-Solange `bewertungenFreigegeben` auf `false` steht, **fehlt die Section im Produktionsbuild
-komplett**; im Dev-Server bleibt sie sichtbar, damit das Layout prüfbar ist. Das ist Absicht:
-Fünf-Sterne-Bewertungen ohne reale Rezension wären eine irreführende Werbeaussage (§ 5 UWG).
+Die fünf echten Rezensionen aus dem Google-Unternehmensprofil sind seit dem 07.09.2026
+eingetragen, `bewertungenFreigegeben` steht auf `true`, die Section ist live.
 
-Sobald die echten Rezensionen vorliegen: Name, Text und Sternezahl eintragen,
-`platzhalter: true` entfernen und `bewertungenFreigegeben` auf `true` setzen.
+**Noch zu erledigen:** Drei Texte (Nadine Spörl, Nikola Milanovic, „O") waren in der Vorlage
+hinter Googles „Mehr"-Link abgeschnitten und enden hier mit „…" (`gekuerzt: true`).
+Vollständige Texte aus dem Google-Profil kopieren und das Flag entfernen. Im Dev-Server
+markiert eine grüne Notiz auf der Karte, welche das sind; im Livebuild sieht man davon nichts.
+
+Zwei Hinweise zum Wortlaut:
+
+- Zwei Rezensionen sprechen von **„MW Raum"** statt von Wallner Bau & Garten — offenbar der
+  frühere Name desselben Betriebs. Der Wortlaut bleibt unverändert; eine Rezension
+  umzuschreiben wäre eine Fälschung.
+- Es wird **keine Gesamtnote und keine Gesamtzahl** ausgegeben, und im JSON-LD steht keine
+  `aggregateRating`. Beides war in der Vorlage nicht sicher lesbar, und eine falsche
+  Sterne-Zusammenfassung wäre eine irreführende Werbeaussage (§ 5 UWG). Wenn die Zahlen
+  belegt vorliegen, kann beides ergänzt werden.
+
+Fällt `bewertungenFreigegeben` je zurück auf `false`, verschwindet die Section im
+Produktionsbuild wieder komplett — die Sicherung ist absichtlich stehen geblieben.
 
 ### 2. Projektorte — unbestätigt, werden nicht ausgegeben
 `src/content.ts` → `projekte` und `orteBestaetigt`. Die Orte sind aus dem Einzugsgebiet
 abgeleitet und nicht vom Kunden bestätigt, deshalb steht `orteBestaetigt` auf `false` und die
 Ortsangabe wird ausgelassen. Nach Rückmeldung: Orte korrigieren, Flag auf `true`.
 
-### 3. Hero-Video Desktop — nicht mehr nötig, Hinweis nur zur Einordnung
-**Erledigt bzw. gegenstandslos.** Der Desktop-Hero zeigt seit September 2026 den
-Vorher/Nachher-Reveal (`hero-vorher-rohbau.jpg` → `hero-nachher-fertig.jpg`) statt einer
-Bildschleife; `HERO_VIDEO_16x9` gibt es in `Hero.tsx` nicht mehr. Der vorhandene
-Hochkant-Clip (720×1280) läuft weiterhin auf Mobilgeräten.
+### 3. Hero — Reveal-Kreis auf dem Desktop, Video auf dem Handy
+Der Hero zeigt auf dem Desktop den Vorher/Nachher-Reveal: Grundebene ist der **fertige
+Raum**, der Mauszeiger schneidet daraus einen Kreis frei, in dem der Rohbau darunter zum
+Vorschein kommt — eine Lupe in die Vergangenheit. Auf Touchgeräten gibt es keinen Hover,
+dort läuft weiterhin `public/video/hero-innenausbau-9x16.mp4`.
 
-Wer den Desktop doch auf Bewegtbild umstellen will, braucht einen 16:9-Clip — dann aber
-den Reveal ersetzen, nicht danebenstellen. Rezept dafür:
+Zwischenstand: Der Reveal war am 07.09.2026 kurzzeitig durch einen Regler über den ganzen
+Bildschirm ersetzt (Bildpaar als Hintergrund, auch auf dem Handy) und wurde noch am selben
+Tag wieder zurückgebaut. Der Code dazu steht in der Git-Historie, falls die Variante doch
+noch einmal gebraucht wird — sie hatte den Vorteil, dass der Effekt auch mobil funktioniert.
+
+Wer den Hero auf Bewegtbild umstellen will, braucht für den Desktop einen 16:9-Clip —
+dann aber als Ersatz für den Reveal, nicht daneben. Rezept dafür:
 
 Erzeugt mit KIE AI, Modell `kling-3.0/video`, Bild-zu-Video aus dem echten Foto
 `wohnraum-holzlamellen-led.jpg`. Kosten laut API: **42 Credits für 3 Sekunden im
@@ -144,6 +201,30 @@ am 20.07.2025 den Betrieb eingestellt, ein Link ginge ins Leere. Die Erklärung 
 `index.html` — `og:image`, `og:url` und `canonical` zeigen auf
 `https://wallner-bau-und-garten.de/`. Falls die Seite unter einer anderen Domain live geht,
 alle drei anpassen; relative OG-URLs lösen Facebook, LinkedIn und WhatsApp nicht auf.
+
+### 7. Neue Leistungen „Dachflächenfenster" und „Türen" — Texte ungeprüft
+`src/content.ts` → `leistungen`. Beide Punkte kommen aus der Kundenliste vom 07.09.2026 und
+standen vorher nirgends. Die Beschreibungen sind neu verfasst und fachlich allgemein
+gehalten. **Vom Kunden zu bestätigen**, besonders der Satz, dass die Arbeiten an der
+Dachhaut zusammen mit Dachdeckerbetrieben aus der Region ausgeführt werden.
+
+Für „Türen" gibt es außerdem keine eigenen Fotos. Gezeigt werden ersatzweise Flur- und
+Innenausbaubilder — sobald echte Türenfotos vorliegen, in `leistungen[4].galerie`,
+`bild` und `bildDetail` austauschen.
+
+### 8. Badsanierung und Erdarbeiten stehen jetzt eingerückt
+Die Kundenliste nennt sechs Leistungen und Badsanierung bzw. Erdarbeiten nicht mehr
+einzeln. Beides ist reale Arbeit mit eigenen Fotos, deshalb steht es als `schwerpunkt`
+innerhalb von „Sanierung & Renovierung" bzw. „Außenanlagen" — die Aufzählung bleibt bei den
+gewünschten sechs Punkten, die Inhalte gehen nicht verloren. Falls der Kunde die beiden
+doch wieder als eigene Punkte will: `schwerpunkt` in einen eigenen Eintrag in `leistungen`
+umziehen, Icon in `icons.tsx` ist mit `IconBad` und `IconBagger` noch vorhanden.
+
+### 9. „16 Jahre Erfahrung" — Zahl aktuell halten
+`src/content.ts` → `firma.jahre`. Die Bestandsseite warb unverändert mit „10 Jahren", laut
+Kunde der Stand von 2020. Der Wert steht jetzt an genau einer Stelle und speist Hero,
+Über-uns-Block, Kennzahlen und die Kontaktseite. Beim nächsten Jahreswechsel hochzählen —
+oder besser durch ein Gründungsjahr ersetzen und die Differenz rechnen lassen.
 
 ## Datenschutz-relevante Entscheidungen
 
@@ -194,6 +275,68 @@ Zwei Dinge sind dabei zu beachten:
 Geladen sind nur die Schnitte 600–900; jede `font-display`-Nutzung hat deshalb ein
 explizites Gewicht, sonst fiele sie auf ein nicht geladenes Rokkitt 400 zurück.
 
+## Scroll-Animationen
+
+Alle Sections blenden ihre Inhalte beim Hereinscrollen ein: leicht von unten, gestaffelt.
+Das läuft über einen einzigen Haken, `useReveal` in `src/anim.ts`. Eine Section holt sich
+den Haken mit einem Ref und markiert die Elemente, die sich bewegen sollen, mit
+`data-reveal`:
+
+```tsx
+const root = useRef<HTMLElement>(null)
+useReveal(root)
+…
+<section ref={root}>
+  <h2 data-reveal>…</h2>
+  <li data-reveal>…</li>
+</section>
+```
+
+Drei Entscheidungen dahinter, die man beim Erweitern kennen sollte:
+
+- **Der Startzustand wird per GSAP gesetzt, nicht per CSS.** Läuft das Skript nicht, steht
+  der Inhalt einfach da. Eine CSS-Regel `opacity: 0` würde ihn dauerhaft verstecken.
+- **Ein Auslöser pro Element** (`ScrollTrigger.batch`), nicht einer pro Section. Bei einer
+  langen Section wäre die Animation sonst längst durchgelaufen, bevor man ihr Ende sieht.
+- **Nur ein Haken pro Elementbaum.** `useReveal` greift auf *alle* `data-reveal` unterhalb
+  seines Refs zu. Deshalb hat `CTABand.tsx` bewusst keinen eigenen — die Unterseite, in der
+  es steht, bringt ihn mit. Zwei Haken auf denselben Elementen überschreiben sich.
+
+Bei `prefers-reduced-motion: reduce` passiert nichts: kein Startzustand, keine Animation.
+Geprüft wurde außerdem, dass nach dem Durchscrollen kein markiertes Element auf halber
+Deckkraft hängen bleibt — auf allen fünf Seitentypen, mobil und am Desktop.
+
+Drei Stellen laufen bewusst nicht über `useReveal`:
+
+- **Der Hero-Text** hat einen eigenen Auftakt beim Laden (`Hero.tsx`): die beiden
+  Headline-Zeilen fahren hinter einer Maske hoch, der Akzentbalken zieht sich von links auf,
+  Claim, Text und Schaltflächen kommen gestaffelt nach. Am Scrollen hängt das nichts — der
+  Hero steht ja schon im Bild. Auch hier `gsap.from`, damit der Zielzustand der normale
+  Zustand des Markups ist.
+- **Das Bewertungs-Banner** bewegt sich auf Klick, nicht beim Scrollen, siehe unten.
+- **Die Projekt-Referenzen** haben ihre eigene Mechanik, siehe übernächster Abschnitt.
+
+## Das Bewertungs-Banner
+
+Die Rezensionen stehen als räumliches Karussell: drei Karten sichtbar, die mittlere vorne,
+die Nachbarn nach hinten gekippt. Pfeile, Pfeiltasten, Wischen und ein Klick auf eine
+Nachbarkarte drehen die Reihe endlos weiter.
+
+Zwei Punkte, die beim Ändern leicht kaputtgehen:
+
+- **Alle Karten liegen im selben Rasterfeld** (`grid-area: 1/1`) statt absolut positioniert.
+  Dadurch ist der Rahmen automatisch so hoch wie die längste Rezension und alle Karten sind
+  gleich hoch. Absolut positioniert müsste man die Höhe raten — und die kürzeste Rezension
+  („Super Service", zwei Wörter) hätte den Rahmen zusammenfallen lassen.
+- **Der seitliche Versatz steht als CSS-Variable** (`--nah` / `--fern`) an der Liste, nicht
+  im JavaScript. Er muss mit der Bildschirmbreite kleiner werden: bei festen 86 % waren die
+  Nachbarn auf dem Handy aus dem Bild geschoben, bei festen 70 % lag am Desktop die vordere
+  Karte über ihnen. Über die Variable regelt das der Breakpoint.
+
+Das Wischen liegt auf der Bühne und nicht auf den Karten, damit auch der Bereich daneben
+zieht; `touch-action: pan-y` überlässt das senkrechte Wischen dem Browser, sonst könnte man
+auf dem Handy an der Section nicht mehr vorbeiscrollen.
+
 ## Die Projekt-Animation
 
 Auf jdavisgc.com nachgemessen: die Bildhöhen dort sind konstant (596/630/630/630 px bei
@@ -223,7 +366,13 @@ geprüft werden können.
 
 ## Herkunft der Inhalte
 
-Alle Texte, Kontaktdaten, Öffnungszeiten, Leistungsbeschreibungen, Impressums- und
-Datenschutzangaben stammen wörtlich von bau-firma.com bzw. wallner-bau-und-garten.de.
+Kontaktdaten, Öffnungszeiten, Impressums- und Datenschutzangaben stammen wörtlich von
+bau-firma.com bzw. wallner-bau-und-garten.de. Dasselbe gilt für die Leistungsbeschreibungen
+zu Trockenbau, Innenausbau, Sanierung, Badsanierung, Außenanlagen und Erdarbeiten.
+
+Neu verfasst und **vom Kunden noch nicht bestätigt** sind die Texte zu „Dachflächenfenster"
+und „Türen" (siehe offener Punkt 7) sowie die Kurzfassungen auf der Startseite. Die Angabe
+„16 Jahre Erfahrung" kommt aus der Kundenrückmeldung vom 07.09.2026 und ersetzt die
+veralteten „10 Jahre" der Bestandsseite.
 Alle 19 Fotos und das Logo sind Originaldateien derselben Seite — es wurden keine
 Stockbilder verwendet. Das Logo wurde lediglich vom dunklen Hintergrund freigestellt.
