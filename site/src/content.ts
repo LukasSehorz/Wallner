@@ -352,7 +352,7 @@ export const projekte: Projekt[] = [
   { titel: 'Dachgeschossausbau', ort: 'Landshut', kategorie: 'Sanierung', bild: '/bilder/dachgeschoss-holzboden.jpg' },
   { titel: 'Terrasse und Gartenanlage', ort: 'Niedertaufkirchen', kategorie: 'Außenanlagen', bild: '/bilder/garten-pool-terrasse.jpg' },
   { titel: 'Deckengestaltung mit Lichtvoute', ort: 'München', kategorie: 'Trockenbau', bild: '/bilder/trockenbau-decke.jpg' },
-  { titel: 'Erdarbeiten am Hang', ort: 'Mühldorf am Inn', kategorie: 'Außenanlagen', bild: '/bilder/erdarbeiten-bagger-lkw.jpg' },
+  { titel: 'Erdarbeiten mit Bagger und Kipper', ort: 'Mühldorf am Inn', kategorie: 'Außenanlagen', bild: '/bilder/erdarbeiten-bagger-lkw.jpg' },
 ]
 
 /** Galerie — alle echten Baustellen- und Ergebnisfotos */
