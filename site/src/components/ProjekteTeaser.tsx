@@ -17,7 +17,7 @@ export default function ProjekteTeaser() {
   useReveal(root)
 
   return (
-    <section ref={root} className="relative overflow-hidden bg-forest-900 pb-4 pt-16 lg:pt-20">
+    <section ref={root} className="relative overflow-hidden bg-forest-900 pt-16 lg:pt-20">
       <div className="shell relative">
         <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr] lg:items-end">
           <div data-reveal>
@@ -65,7 +65,12 @@ export default function ProjekteTeaser() {
         </div>
       </div>
 
-      {/* Übergang dunkel → hell in den Kontaktbereich */}
+      {/* Übergang dunkel → hell in die Bewertungen.
+          Wichtig: Die Section darf darunter keinen Innenabstand mehr haben.
+          Mit `pb-4` stand unter dem fertig ausgelaufenen Verlauf noch ein
+          Streifen Sectionhintergrund — als schwarzer Balken quer über die
+          Seite, direkt an der hellen Kante. Das Band muss das letzte Element
+          sein und bis zur Sectionkante reichen. */}
       <div className="mt-16 h-16 fade-to-light lg:h-24" aria-hidden="true" />
     </section>
   )
