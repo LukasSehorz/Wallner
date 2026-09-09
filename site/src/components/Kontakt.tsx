@@ -260,7 +260,7 @@ export default function Kontakt() {
                   type="checkbox"
                   name="einwilligung"
                   required
-                  className="mt-0.5 h-5 w-5 shrink-0 accent-[#AAC527]"
+                  className="mt-0.5 h-6 w-6 shrink-0 accent-[#AAC527]"
                 />
                 <span>
                   Ich bin damit einverstanden, dass diese Daten zum Zweck der Kontaktaufnahme

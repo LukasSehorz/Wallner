@@ -275,6 +275,30 @@ Zwei Dinge sind dabei zu beachten:
 Geladen sind nur die Schnitte 600–900; jede `font-display`-Nutzung hat deshalb ein
 explizites Gewicht, sonst fiele sie auf ein nicht geladenes Rokkitt 400 zurück.
 
+## Mobil
+
+Die Seite ist durchgehend mobil-zuerst gebaut (Tailwind, Breakpoints ab `sm`). Geprüft mit
+echtem Chrome auf 320, 360, 390, 412 und 768 px über alle Seitentypen: kein waagerechter
+Überlauf, keine Tippfläche unter 44 px Höhe, keine Fließtextschrift unter 12 px, keine
+JS-Fehler.
+
+Zwei Dinge, die dabei aufgefallen sind und in den CSS-Regeln stecken:
+
+- **Silbentrennung in Überschriften** (`.display` in `src/index.css`). Deutsche Komposita
+  sind länger, als ein schmales Handy breit ist: „Dachflächenfenster" braucht in der
+  Headline-Schrift 378 px, ein iPhone SE hat 320. Ohne Trennung schiebt so ein Wort die
+  ganze Seite in die Breite — genau das ist auf `/impressum` bei
+  „Verbraucherstreitbeilegung" passiert.
+  Dazu gehört `hyphenate-limit-chars: 8 5 5`: ohne die Vorgabe füllt der Browser die Zeile
+  so weit wie möglich und trennt an der letzten passenden Stelle, was
+  „DACHFLÄCHENFENS-TER" ergab. Mit mindestens fünf Zeichen vor und nach dem Strich bleibt
+  „DACHFLÄCHEN-FENSTER" übrig.
+- **Hochformat-Bilder brauchen einen eigenen Rahmen.** Die Bildrahmen sind quer; ein
+  9:16-Foto verliert darin oben und unten je ein Drittel. Deshalb gibt es am Schwerpunkt
+  `hochformat: true` (Rahmen legt sich ans Bild an) und in den Galerien `fokus` als
+  `object-position` — ohne die Angabe zeigt der quere Ausschnitt beim Bagger-Foto die Mauer
+  statt der Maschinen.
+
 ## Scroll-Animationen
 
 Alle Sections blenden ihre Inhalte beim Hereinscrollen ein: leicht von unten, gestaffelt.

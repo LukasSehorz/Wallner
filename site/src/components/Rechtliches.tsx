@@ -59,12 +59,12 @@ export default function Rechtliches() {
             <h3 className={h}>Kontakt</h3>
             <p className={p}>
               Telefon:{' '}
-              <a href={firma.telefonHref} className="text-lime underline">
+              <a href={firma.telefonHref} className="inline-flex min-h-11 items-center py-1 text-lime underline">
                 {firma.telefon}
               </a>
               <br />
               E-Mail:{' '}
-              <a href={`mailto:${firma.email}`} className="text-lime underline">
+              <a href={`mailto:${firma.email}`} className="inline-flex min-h-11 items-center py-1 text-lime underline">
                 {firma.email}
               </a>
             </p>

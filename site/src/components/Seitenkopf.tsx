@@ -53,7 +53,7 @@ export default function Seitenkopf({
           <Link
             data-reveal
             to={zurueck.to}
-            className="inline-flex items-center gap-2 text-[13px] font-semibold uppercase tracking-[0.16em] text-white/60 transition-colors hover:text-lime"
+            className="inline-flex min-h-11 items-center gap-2 py-2 text-[13px] font-semibold uppercase tracking-[0.16em] text-white/60 transition-colors hover:text-lime"
           >
             <IconChevronLeft className="h-4 w-4" />
             {zurueck.label}

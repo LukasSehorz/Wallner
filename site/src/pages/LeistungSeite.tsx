@@ -132,12 +132,24 @@ export default function LeistungSeite({ leistung: l }: { leistung: Leistung }) {
       {l.schwerpunkt && (
         <section className="bg-forest-950 py-16 lg:py-20">
           <div className="shell grid items-center gap-9 lg:grid-cols-2 lg:gap-16">
-            <div data-reveal className="overflow-hidden rounded-[20px] shadow-plate lg:order-2">
+            {/* Hochformat bekommt einen Rahmen, der sich an das Bild anlegt
+                (`w-fit` + begrenzte Höhe), statt es in den queren Rahmen zu
+                zwingen — dort fiele oben der Bagger oder unten der Dumper weg. */}
+            <div
+              data-reveal
+              className={`overflow-hidden rounded-[20px] shadow-plate lg:order-2 ${
+                l.schwerpunkt.hochformat ? 'mx-auto w-fit' : ''
+              }`}
+            >
               <img
                 src={l.schwerpunkt.bild}
                 alt={l.schwerpunkt.bildAlt}
                 loading="lazy"
-                className="h-[280px] w-full object-cover sm:h-[420px]"
+                className={
+                  l.schwerpunkt.hochformat
+                    ? 'max-h-[460px] w-auto object-contain sm:max-h-[560px] lg:max-h-[660px]'
+                    : 'h-[280px] w-full object-cover sm:h-[420px]'
+                }
               />
             </div>
             <div data-reveal className="lg:order-1">
@@ -149,7 +161,7 @@ export default function LeistungSeite({ leistung: l }: { leistung: Leistung }) {
               </p>
               <Link
                 to="/kontakt"
-                className="group mt-7 inline-flex items-center gap-2.5 font-display text-[16px] font-bold uppercase tracking-wider text-lime"
+                className="group mt-5 inline-flex min-h-11 items-center gap-2.5 py-2 font-display text-[16px] font-bold uppercase tracking-wider text-lime"
               >
                 Dazu beraten lassen
                 <IconArrow className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
@@ -174,6 +186,7 @@ export default function LeistungSeite({ leistung: l }: { leistung: Leistung }) {
                   src={g.bild}
                   alt={g.alt}
                   loading="lazy"
+                  style={{ objectPosition: g.fokus ?? 'center' }}
                   className="h-[220px] w-full object-cover transition-transform duration-700 hover:scale-[1.04] sm:h-[260px]"
                 />
               </li>

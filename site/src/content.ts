@@ -54,6 +54,12 @@ export type Schwerpunkt = {
   text: string
   bild: string
   bildAlt: string
+  /**
+   * Hochformat-Aufnahme. Der Bildrahmen des Schwerpunkts ist sonst quer und
+   * schneidet ein 9:16-Bild oben und unten ab — beim Bagger-Foto wäre damit je
+   * eine der beiden Maschinen weg.
+   */
+  hochformat?: boolean
 }
 
 export type Leistung = {
@@ -75,7 +81,12 @@ export type Leistung = {
   schritte: [string, string, string]
   /** Hervorgehobenes Teilgebiet innerhalb der Leistung. */
   schwerpunkt?: Schwerpunkt
-  galerie: { bild: string; alt: string }[]
+  /**
+   * `fokus` ist die CSS-`object-position` der Kachel. Nötig für Hochformate:
+   * ohne Angabe zeigt der quere Ausschnitt die Bildmitte — beim Bagger-Foto
+   * also die Mauer statt der Maschinen.
+   */
+  galerie: { bild: string; alt: string; fokus?: string }[]
   /** Meta-Description der Unterseite. */
   meta: string
 }
@@ -299,13 +310,16 @@ export const leistungen: Leistung[] = [
     schwerpunkt: {
       titel: 'Schwerpunkt: Erdarbeiten',
       text: 'Unser eigener Minibagger bis 1,5 Tonnen passt durch Hofeinfahrten und zwischen Bestandsmauern hindurch, wo größere Maschinen aufgeben müssen. Weil das Gerät uns selbst gehört, hängen Ihre Termine nicht an der Verfügbarkeit eines Mietparks — auch kurzfristige und kleinere Einsätze lassen sich sauber einplanen.',
-      bild: '/bilder/minibagger-rot-erdarbeiten.jpg',
-      bildAlt: 'Minibagger bei Erdarbeiten im Gelände',
+      bild: '/bilder/erdarbeiten-minibagger-dumper.jpg',
+      bildAlt: 'Minibagger von Wallner Bau & Garten belädt einen Raupendumper mit Aushub',
+      hochformat: true,
     },
     galerie: [
       { bild: '/bilder/garten-pool-terrasse.jpg', alt: 'Gartenanlage mit Pool, Plattenbelag und Sichtschutz' },
       { bild: '/bilder/terrasse-holzdeck.jpg', alt: 'Terrasse mit Holzdielenbelag und Geländer' },
-      { bild: '/bilder/erdarbeiten-bagger-lkw.jpg', alt: 'Erdarbeiten mit Bagger und Kipper auf der Baustelle' },
+      { bild: '/bilder/erdarbeiten-minibagger-dumper.jpg', alt: 'Minibagger belädt einen Raupendumper mit Aushub', fokus: 'center 30%' },
+      { bild: '/bilder/erdarbeiten-minibagger-dumper.jpg', alt: 'Minibagger belädt einen Raupendumper mit Aushub', fokus: 'center 30%' },
+  { bild: '/bilder/erdarbeiten-bagger-lkw.jpg', alt: 'Erdarbeiten mit Bagger und Kipper auf der Baustelle' },
       { bild: '/bilder/minibagger-rot-erdarbeiten.jpg', alt: 'Minibagger bei Erdarbeiten im Gelände' },
       { bild: '/bilder/pickup-bagger-baustelle.jpg', alt: 'Firmenfahrzeug mit Anhänger und Radlader auf der Baustelle' },
     ],
@@ -356,7 +370,7 @@ export const projekte: Projekt[] = [
 ]
 
 /** Galerie — alle echten Baustellen- und Ergebnisfotos */
-export const galerie = [
+export const galerie: { bild: string; alt: string; fokus?: string }[] = [
   { bild: '/bilder/wohnraum-holzlamellen-led.jpg', alt: 'Wohnraum mit vertikaler Holzlamellenwand und indirekter LED-Beleuchtung' },
   { bild: '/bilder/bad-fertig-1.jpg', alt: 'Fertig saniertes Badezimmer mit Waschtisch und Spiegelwand' },
   { bild: '/bilder/bad-dusche-fertig.jpg', alt: 'Bodengleiche Dusche mit großformatigen Fliesen' },

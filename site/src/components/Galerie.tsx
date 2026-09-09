@@ -143,6 +143,7 @@ export default function Galerie() {
                     src={g.bild}
                     alt={g.alt}
                     loading="lazy"
+                    style={{ objectPosition: g.fokus ?? 'center' }}
                     className="h-[230px] w-full object-cover transition-transform duration-500 group-hover:scale-105 sm:h-[280px]"
                   />
                 </button>

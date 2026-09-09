@@ -29,6 +29,20 @@
     line-height: 0.94;
     letter-spacing: -0.005em;
     font-feature-settings: 'kern' 1;
+    /* Deutsche Komposita sind laenger als ein schmales Handy breit ist:
+       „Dachflaechenfenster" braucht in dieser Schrift 378 px, ein iPhone SE
+       hat 320. Ohne Trennung schiebt so ein Wort die ganze Seite in die
+       Breite. `hyphens` greift nur, wenn die Zeile sonst nicht passt — die
+       Umbrueche auf breiten Schirmen bleiben also unveraendert.
+       `break-word` ist die Notbremse fuer Woerter ohne Trennstelle.
+
+       `hyphenate-limit-chars` verhindert Trennungen wie „DACHFLAECHENFENS-
+       TER": ohne die Vorgabe fuellt der Browser die Zeile so weit wie moeglich
+       und trennt an der letzten passenden Stelle. Mit mindestens fuenf Zeichen
+       vor und nach dem Strich bleibt nur „DACHFLAECHEN-FENSTER" uebrig. */
+    hyphens: auto;
+    hyphenate-limit-chars: 8 5 5;
+    overflow-wrap: break-word;
   }
 
   ::selection {
@@ -50,7 +64,7 @@
 
   /* Eyebrow mit Strich davor — Signature-Element der Referenz */
   .eyebrow {
-    @apply flex items-start gap-4 text-[11px] font-bold uppercase tracking-[0.22em];
+    @apply flex items-start gap-4 text-[12px] font-bold uppercase tracking-[0.22em] sm:text-[11px];
   }
   .eyebrow::before {
     content: '';
