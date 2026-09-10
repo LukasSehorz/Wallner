@@ -14,6 +14,7 @@
  *   ANFRAGE_VON      Absender auf einer bei Resend verifizierten Domain,
  *                    z. B. "Wallner Website <anfrage@bau-firma.com>"
  */
+import { anfrageHtml } from './anfrage-vorlage'
 
 type Felder = {
   name: string
@@ -47,7 +48,12 @@ function text(werte: Felder) {
   ].join('\n')
 }
 
-/** Auf HTML verzichtet: reiner Text kommt überall an und landet seltener im Spam. */
+/**
+ * Die Mail geht als HTML *und* als Text raus. Das ist kein doppelter Aufwand,
+ * sondern der uebliche Weg: Wer HTML abgeschaltet hat oder eine Uhr-App
+ * benutzt, bekommt den Textteil; alle anderen das Layout. Mails ohne Textteil
+ * bewerten Spamfilter zudem schlechter.
+ */
 export default async function handler(request: Request) {
   if (request.method !== 'POST') {
     return new Response('Nur POST', { status: 405 })
@@ -97,6 +103,14 @@ export default async function handler(request: Request) {
     return Response.json({ ok: false, grund: 'zu-lang' }, { status: 400 })
   }
 
+  // Zeitstempel in deutscher Schreibweise und Ortszeit — der Empfaenger sitzt
+  // in Bayern, eine UTC-Angabe muesste er selbst umrechnen.
+  const eingegangen = new Intl.DateTimeFormat('de-DE', {
+    dateStyle: 'long',
+    timeStyle: 'short',
+    timeZone: 'Europe/Berlin',
+  }).format(new Date())
+
   const antwort = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
@@ -110,6 +124,7 @@ export default async function handler(request: Request) {
       reply_to: werte.email,
       subject: `Anfrage über die Website — ${werte.name}`,
       text: text(werte),
+      html: anfrageHtml(werte, eingegangen),
     }),
   })
 
