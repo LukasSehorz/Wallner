@@ -136,14 +136,21 @@
 # funktionieren, muss jeder Pfad dieselbe index.html bekommen.
 #
 # Status 200 und nicht 301: die Adresse in der Leiste soll stehen bleiben.
-# Der Preis ist, dass der Server keinen 404 mehr senden kann — eine unbekannte
-# Adresse liefert die 404-Seite der App mit Status 200. Fuer Google ist das
-# eine "Soft 404". Deshalb setzt src/pages/NichtGefunden.tsx zusaetzlich ein
-# noindex, damit solche Adressen nicht im Index landen.
+#
+# Der Preis: Eine unbekannte Adresse liefert die 404-Seite der App — aber mit
+# Status 200. Fuer Google ist das eine "Soft 404", und der Hinweis `noindex`
+# aus src/pages/NichtGefunden.tsx wird erst per JavaScript gesetzt, also beim
+# ersten Durchgang des Crawlers gar nicht gesehen.
+#
+# Deshalb bekommt der Catch-all Status 404: Der Besucher sieht unveraendert
+# die gestaltete Fehlerseite, der Server sagt aber ehrlich "gibt es nicht".
+# Fuer die echten Adressen aendert das nichts — sie werden vorher als Datei
+# ausgeliefert (dist/leistungen/trockenbau.html und so weiter) und erreichen
+# diese Regel nie.
 [[redirects]]
   from = "/*"
   to = "/index.html"
-  status = 200
+  status = 404
 
 [[headers]]
   for = "/*"
