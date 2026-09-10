@@ -7,11 +7,15 @@ import { IconClock, IconMail, IconPhone, IconPin } from './icons'
  * Kontaktbereich nach BP-Marine-Vorbild: links dunkle Karte mit Headline,
  * Telefonblock und Fakten-Kacheln, rechts weiße Formularkarte.
  *
- * TODO: `FORM_ENDPOINT` auf das echte Ziel setzen (z. B. Formspree, Netlify
- * Forms oder eigenes PHP-Skript). Solange nichts hinterlegt ist, öffnet das
- * Formular eine vorausgefüllte E-Mail im Mailprogramm.
+ * Der Versand läuft über `netlify/functions/anfrage.ts` (per Resend), nicht
+ * über `mailto:`. Der frühere mailto-Weg hat jeden Zweiten verloren: Wer kein
+ * Mailprogramm eingerichtet hat — auf dem Handy die Mehrheit —, klickte auf
+ * „Anfrage senden" und es passierte sichtbar nichts.
+ *
+ * Fällt der Versand aus (Schlüssel fehlt, Resend gestört), bekommt der
+ * Besucher die Telefonnummer als Ausweg genannt statt einer Sackgasse.
  */
-const FORM_ENDPOINT: string | null = null
+const ANFRAGE_ENDPUNKT = '/api/anfrage'
 
 const fakten = [
   { titel: 'Leistungen', text: '6 Gewerke aus einer Hand' },
@@ -37,27 +41,18 @@ export default function Kontakt() {
 
     setBusy(true)
     try {
-      if (FORM_ENDPOINT) {
-        const res = await fetch(FORM_ENDPOINT, { method: 'POST', body: fd, headers: { Accept: 'application/json' } })
-        if (!res.ok) throw new Error('Senden fehlgeschlagen')
-      } else {
-        const body = [
-          `Name: ${fd.get('name')}`,
-          `E-Mail: ${fd.get('email')}`,
-          `Telefon: ${fd.get('telefon')}`,
-          `Ort / Adresse: ${fd.get('ort')}`,
-          `Rückmeldung: ${fd.get('rueckmeldung')}`,
-          '',
-          `${fd.get('nachricht')}`,
-        ].join('\n')
-        window.location.href = `mailto:${firma.email}?subject=${encodeURIComponent(
-          'Anfrage über die Website',
-        )}&body=${encodeURIComponent(body)}`
-      }
+      const res = await fetch(ANFRAGE_ENDPUNKT, {
+        method: 'POST',
+        body: fd,
+        headers: { Accept: 'application/json' },
+      })
+      if (!res.ok) throw new Error(`Senden fehlgeschlagen (${res.status})`)
       setSent(true)
       form.reset()
     } catch {
-      setFehler('Die Nachricht konnte nicht gesendet werden. Bitte rufen Sie uns kurz an.')
+      setFehler(
+        `Die Nachricht konnte gerade nicht gesendet werden. Bitte rufen Sie uns kurz an: ${firma.telefon}`,
+      )
     } finally {
       setBusy(false)
     }
@@ -166,12 +161,10 @@ export default function Kontakt() {
               role="status"
               aria-live="polite"
             >
-              <p className="display text-2xl text-moss-900">{FORM_ENDPOINT ? 'Danke für Ihre Anfrage.' : 'Ihr Mailprogramm wurde geöffnet.'}</p>
+              <p className="display text-2xl text-moss-900">Danke für Ihre Anfrage.</p>
               <p className="mt-2 text-[14px] text-moss-900/70">
-                {FORM_ENDPOINT
-                  ? 'Wir haben Ihre Nachricht erhalten und melden uns zeitnah. '
-                  : 'Bitte senden Sie die vorbereitete Nachricht dort noch ab — erst dann erreicht sie uns. '}
-                Wenn es eilt, erreichen Sie uns direkt unter{' '}
+                Wir haben Ihre Nachricht erhalten und melden uns in der Regel innerhalb eines
+                Werktags. Wenn es eilt, erreichen Sie uns direkt unter{' '}
                 <a href={firma.telefonHref} className="font-semibold text-lime-dark underline">
                   {firma.telefon}
                 </a>
@@ -281,6 +274,18 @@ export default function Kontakt() {
                   {fehler}
                 </p>
               )}
+
+              {/* Honigtopf: liegt ausserhalb des Bildes und ist aus dem Tab-Fluss
+                  genommen, sodass ihn weder Auge noch Tastatur erreicht.
+                  `fixed` statt `absolute`, weil das <form> kein `relative`
+                  traegt — sonst haenge das Feld am naechsten positionierten
+                  Vorfahren und koennte im Bild landen.
+                  Bots fuellen ihn aus — die Funktion verwirft solche Anfragen.
+                  Kein `display:none`: das erkennen viele Bots und lassen es aus. */}
+              <div aria-hidden="true" className="fixed left-[-9999px] top-0 h-0 w-0 overflow-hidden">
+                <label htmlFor="webseite">Bitte nicht ausfüllen</label>
+                <input id="webseite" name="webseite" tabIndex={-1} autoComplete="off" />
+              </div>
 
               <button type="submit" disabled={busy} className="btn-primary w-fit disabled:opacity-60">
                 {busy ? 'Wird gesendet …' : 'Anfrage senden'}

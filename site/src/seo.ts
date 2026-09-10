@@ -8,7 +8,17 @@ import { useEffect } from 'react'
  * Titel — für die Suche und für geteilte Links wäre das ein Rückschritt
  * gegenüber der bisherigen Einzelseite.
  */
-const BASIS = 'https://wallner-bau-und-garten.de'
+/**
+ * Hauptadresse der Seite. Sie steckt in jedem Canonical und in og:url und sagt
+ * Google, welche Adresse die echte ist.
+ *
+ * Der Betrieb hat zwei Domains: bau-firma.com (seit Jahren online, mit dem
+ * gewachsenen Suchverlauf) und wallner-bau-und-garten.de. Entschieden wurde
+ * für bau-firma.com — die zweite Domain leitet dorthin weiter. Steht hier die
+ * falsche, verweist jede Unterseite auf eine Adresse, unter der sie nicht
+ * erreichbar ist, und die Seite verschenkt ihre Sichtbarkeit.
+ */
+const BASIS = 'https://bau-firma.com'
 
 function setzeMeta(name: string, inhalt: string, attribut: 'name' | 'property' = 'name') {
   let el = document.head.querySelector<HTMLMetaElement>(`meta[${attribut}="${name}"]`)

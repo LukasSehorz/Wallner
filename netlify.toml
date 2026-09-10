@@ -7,9 +7,107 @@
 [build.environment]
   NODE_VERSION = "22"
 
+# Die Funktionen liegen im Repo-Root, `base` zeigt aber auf "site".
+# Deshalb der Weg eine Ebene nach oben.
+[functions]
+  directory = "../netlify/functions"
+
+# ---------------------------------------------------------------------------
+# Weiterleitungen
+#
+# Reihenfolge zaehlt: Netlify nimmt die erste passende Regel. Die Catch-all-
+# Regel fuer den Browser-Router muss deshalb ganz unten stehen, sonst
+# verschluckt sie alles darueber.
+# ---------------------------------------------------------------------------
+
+# Zweitdomain auf die Hauptdomain. Ohne diese Regel waere die Seite unter zwei
+# Adressen erreichbar; Google wertet das als doppelten Inhalt und muss raten,
+# welche die echte ist. 301 = dauerhaft, damit die Bewertung mit umzieht.
+[[redirects]]
+  from = "https://wallner-bau-und-garten.de/*"
+  to = "https://bau-firma.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.wallner-bau-und-garten.de/*"
+  to = "https://bau-firma.com/:splat"
+  status = 301
+  force = true
+
+# www auf die Adresse ohne www — festgelegt als Hauptadresse in src/seo.ts.
+[[redirects]]
+  from = "https://www.bau-firma.com/*"
+  to = "https://bau-firma.com/:splat"
+  status = 301
+  force = true
+
+# --- Adressen der alten IONOS-Seite ---------------------------------------
+#
+# Die alte Seite hatte ihre Inhalte auf einer einzigen Seite mit Sprungmarken
+# (#leistungen und aehnlich). Sprungmarken sieht der Server nicht, die muss der
+# Browser aufloesen — dafuer sorgt src/router.tsx.
+#
+# Was der Server sieht, sind echte Pfade. Die hier bekannten werden auf ihre
+# Entsprechung in der neuen Struktur gelenkt, statt auf der Startseite zu
+# landen: Wer bei Google "Trockenbau Muehldorf" gesucht und die alte
+# Leistungsseite angeklickt hat, soll auf der neuen Leistungsseite landen und
+# nicht raten muessen.
+#
+# TODO: Diese Liste ist geraten und nicht aus der alten Seite ausgelesen —
+# beim Umzug war sie schon offline. Sobald die Search Console die echten alten
+# Adressen zeigt (Seiten -> Nicht indexiert -> 404), gehoeren sie hier ergaenzt.
+[[redirects]]
+  from = "/leistungen.html"
+  to = "/leistungen"
+  status = 301
+
+[[redirects]]
+  from = "/kontakt.html"
+  to = "/kontakt"
+  status = 301
+
+[[redirects]]
+  from = "/impressum.html"
+  to = "/impressum"
+  status = 301
+
+[[redirects]]
+  from = "/datenschutz.html"
+  to = "/datenschutz"
+  status = 301
+
+[[redirects]]
+  from = "/ueber-uns"
+  to = "/#ueber-uns"
+  status = 301
+
+[[redirects]]
+  from = "/galerie"
+  to = "/projekte"
+  status = 301
+
+[[redirects]]
+  from = "/referenzen"
+  to = "/projekte"
+  status = 301
+
+# Das Kontaktformular. Muss VOR der Catch-all-Regel stehen, sonst bekaeme
+# der Aufruf die index.html statt der Funktion.
+[[redirects]]
+  from = "/api/anfrage"
+  to = "/.netlify/functions/anfrage"
+  status = 200
+
 # Der Router laeuft im Browser (src/router.tsx). Damit echte URLs wie
 # /leistungen/trockenbau auch beim direkten Aufruf und beim Teilen des Links
 # funktionieren, muss jeder Pfad dieselbe index.html bekommen.
+#
+# Status 200 und nicht 301: die Adresse in der Leiste soll stehen bleiben.
+# Der Preis ist, dass der Server keinen 404 mehr senden kann — eine unbekannte
+# Adresse liefert die 404-Seite der App mit Status 200. Fuer Google ist das
+# eine "Soft 404". Deshalb setzt src/pages/NichtGefunden.tsx zusaetzlich ein
+# noindex, damit solche Adressen nicht im Index landen.
 [[redirects]]
   from = "/*"
   to = "/index.html"
@@ -27,3 +125,15 @@
   for = "/assets/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+# Sitemap und robots duerfen nicht lange zwischengespeichert werden, sonst
+# sieht Google nach einer Aenderung tagelang den alten Stand.
+[[headers]]
+  for = "/sitemap.xml"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+[[headers]]
+  for = "/robots.txt"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
