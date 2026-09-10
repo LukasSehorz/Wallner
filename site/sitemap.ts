@@ -203,7 +203,23 @@ Sitemap: ${HAUPTADRESSE}/sitemap.xml
       const rumpf = readFileSync(quelle, 'utf-8')
 
       for (const [pfad, kopf] of Object.entries(kopfDaten(wurzel))) {
-        const ziel = resolve(ausgabe, pfad.replace(/^\//, ''), 'index.html')
+        /*
+         * Geschrieben wird `leistungen/trockenbau.html`, NICHT
+         * `leistungen/trockenbau/index.html`.
+         *
+         * Der Unterschied entscheidet ueber die Adresse: Bei einer
+         * index.html im Ordner liefert Netlify die Seite unter
+         * `/leistungen/trockenbau/` aus und leitet die Fassung ohne
+         * Schraegstrich per 301 dorthin um. Dann zeigten Sitemap,
+         * Canonical und die Links des Routers auf eine Adresse, die
+         * umleitet — und die Seite widerspraeche mit ihrem eigenen
+         * Canonical dem Ort, an dem sie liegt.
+         *
+         * Als `.html`-Datei daneben liefert Netlify sie direkt unter
+         * `/leistungen/trockenbau` aus, ohne Umleitung. Damit stimmen
+         * Sitemap, Canonical, Routerlinks und Serveradresse ueberein.
+         */
+        const ziel = resolve(ausgabe, `${pfad.replace(/^\//, '')}.html`)
         mkdirSync(dirname(ziel), { recursive: true })
         writeFileSync(ziel, kopfErsetzen(rumpf, kopf.titel, kopf.text, HAUPTADRESSE + pfad))
       }
