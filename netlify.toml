@@ -9,8 +9,15 @@
 
 # Die Funktionen liegen im Repo-Root, `base` zeigt aber auf "site".
 # Deshalb der Weg eine Ebene nach oben.
+#
+# `included_files` nimmt die Vorlage ausdruecklich mit ins Buendel. Netlify
+# folgt Importen normalerweise von selbst; bei einem Verzeichnis ausserhalb
+# von `base` ist das aber schon schiefgegangen, und ein fehlender HTML-Teil
+# faellt niemandem auf — die Mail kommt ja an, nur unformatiert.
 [functions]
   directory = "../netlify/functions"
+  included_files = ["../netlify/functions/lib/**"]
+  node_bundler = "esbuild"
 
 # ---------------------------------------------------------------------------
 # Weiterleitungen
