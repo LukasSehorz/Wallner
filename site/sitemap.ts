@@ -92,9 +92,11 @@ function attr(wert: string) {
 }
 
 /** Titel und Beschreibung je Adresse — muss zu den useSeo-Aufrufen passen. */
-function kopfDaten(wurzel: string): Record<string, { titel: string; text: string }> {
+function kopfDaten(
+  wurzel: string,
+): Record<string, { titel: string; text: string; canonical?: string }> {
   const firma = nameLang(wurzel)
-  const daten: Record<string, { titel: string; text: string }> = {
+  const daten: Record<string, { titel: string; text: string; canonical?: string }> = {
     '/leistungen': {
       titel: `Leistungen | ${firma}`,
       text: `Trockenbau, Innenausbau, Sanierung, Dachflächenfenster, Türen und Außenanlagen von ${firma} im Raum Mühldorf am Inn.`,
@@ -110,6 +112,27 @@ function kopfDaten(wurzel: string): Record<string, { titel: string; text: string
     '/rechtliches': {
       titel: `Impressum & Datenschutz | ${firma}`,
       text: `Impressum und Datenschutzerklärung von ${firma}.`,
+    },
+    /*
+     * /impressum und /datenschutz sind eigene Routen (siehe App.tsx) und
+     * zeigen dieselbe Seite wie /rechtliches. Sie brauchen trotzdem eine
+     * eigene Vorab-Datei: Ohne sie fallen sie in die Catch-all-Regel, und
+     * seit die 404 sendet, waeren beide Pflichtseiten schlicht kaputt —
+     * /datenschutz mit 404, /impressum sogar in einer Endlosschleife, weil
+     * die Weiterleitung von /impressum/ auf /impressum ins Leere zeigte.
+     *
+     * Das Canonical zeigt bei beiden auf /rechtliches, damit Google die drei
+     * Adressen nicht als drei Seiten mit gleichem Inhalt zaehlt.
+     */
+    '/impressum': {
+      titel: `Impressum | ${firma}`,
+      text: `Impressum von ${firma}.`,
+      canonical: '/rechtliches',
+    },
+    '/datenschutz': {
+      titel: `Datenschutz | ${firma}`,
+      text: `Datenschutzerklärung von ${firma}.`,
+      canonical: '/rechtliches',
     },
   }
   for (const l of leistungen(wurzel)) {
@@ -221,7 +244,10 @@ Sitemap: ${HAUPTADRESSE}/sitemap.xml
          */
         const ziel = resolve(ausgabe, `${pfad.replace(/^\//, '')}.html`)
         mkdirSync(dirname(ziel), { recursive: true })
-        writeFileSync(ziel, kopfErsetzen(rumpf, kopf.titel, kopf.text, HAUPTADRESSE + pfad))
+        // `canonical` weicht nur dort ab, wo mehrere Adressen dieselbe
+        // Seite zeigen (Impressum/Datenschutz -> Rechtliches).
+        const adresse = HAUPTADRESSE + (kopf.canonical ?? pfad)
+        writeFileSync(ziel, kopfErsetzen(rumpf, kopf.titel, kopf.text, adresse))
       }
     },
   }
