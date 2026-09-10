@@ -13,6 +13,11 @@ export default function NichtGefunden() {
     titel: `Seite nicht gefunden | ${firma.nameLang}`,
     beschreibung: 'Die aufgerufene Seite existiert nicht.',
     pfad: '/',
+    // Netlify liefert fuer unbekannte Adressen die index.html mit Status 200
+    // aus, damit die echten URLs funktionieren. Ein 404 ist damit nicht
+    // moeglich — ohne noindex wuerde Google jeden Tippfehler als eigene Seite
+    // indexieren ("Soft 404") und die Startseite verwaessern.
+    nichtIndexieren: true,
   })
 
   return (

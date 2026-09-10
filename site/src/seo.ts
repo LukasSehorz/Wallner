@@ -34,13 +34,17 @@ export function useSeo({
   titel,
   beschreibung,
   pfad,
+  nichtIndexieren = false,
 }: {
   titel: string
   beschreibung: string
   pfad: string
+  /** Setzt `robots: noindex` — fuer Adressen, die es nicht gibt. */
+  nichtIndexieren?: boolean
 }) {
   useEffect(() => {
     document.title = titel
+    setzeMeta('robots', nichtIndexieren ? 'noindex, follow' : 'index, follow')
     setzeMeta('description', beschreibung)
     setzeMeta('og:title', titel, 'property')
     setzeMeta('og:description', beschreibung, 'property')
@@ -53,5 +57,5 @@ export function useSeo({
       document.head.appendChild(link)
     }
     link.href = BASIS + pfad
-  }, [titel, beschreibung, pfad])
+  }, [titel, beschreibung, pfad, nichtIndexieren])
 }

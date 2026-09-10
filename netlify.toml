@@ -64,6 +64,31 @@
 # TODO: Diese Liste ist geraten und nicht aus der alten Seite ausgelesen —
 # beim Umzug war sie schon offline. Sobald die Search Console die echten alten
 # Adressen zeigt (Seiten -> Nicht indexiert -> 404), gehoeren sie hier ergaenzt.
+# Die echten alten Adressen, aus dem Wayback-Archiv ausgelesen (Stand der
+# IONOS-Seite). Sie enden auf einen Schraegstrich — die vorher geratene Liste
+# lag daneben. `/datenschutzerklaerung/` gab es hier gar nicht: die Adresse
+# lieferte bis eben die Startseite mit Status 200, also eine "Soft 404" auf
+# einer Adresse, die Google indexiert hat.
+[[redirects]]
+  from = "/kontakt/"
+  to = "/kontakt"
+  status = 301
+
+[[redirects]]
+  from = "/impressum/"
+  to = "/impressum"
+  status = 301
+
+[[redirects]]
+  from = "/datenschutzerklaerung/"
+  to = "/datenschutz"
+  status = 301
+
+[[redirects]]
+  from = "/ueber-uns/"
+  to = "/#ueber-uns"
+  status = 301
+
 [[redirects]]
   from = "/leistungen.html"
   to = "/leistungen"
