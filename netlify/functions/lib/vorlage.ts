@@ -1,6 +1,11 @@
 /**
  * HTML-Vorlage für die Anfrage-Mail, im Firmendesign.
  *
+ * Liegt in `lib/`, nicht neben anfrage.ts: Netlify baut jede .ts-Datei direkt
+ * im functions-Ordner als eigene Function. Als Geschwisterdatei wurde diese
+ * Vorlage zu einem eigenen HTTP-Endpunkt, und der Import in anfrage.ts lief
+ * ins Leere — die Mails gingen dann ohne HTML-Teil raus.
+ *
  * E-Mail-Programme sind kein Browser. Outlook rendert mit der Word-Engine,
  * Gmail entfernt <style>-Bloecke bei Weiterleitungen, viele Clients kennen
  * weder Flexbox noch Grid. Deshalb hier bewusst altmodisch:

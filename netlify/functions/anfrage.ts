@@ -14,7 +14,12 @@
  *   ANFRAGE_VON      Absender auf einer bei Resend verifizierten Domain,
  *                    z. B. "Wallner Website <anfrage@bau-firma.com>"
  */
-import { anfrageHtml } from './anfrage-vorlage'
+// Liegt bewusst in lib/: Netlify baut JEDE .ts-Datei direkt im
+// functions-Ordner als eigene Function. Als Geschwisterdatei wurde die
+// Vorlage deshalb zu einem eigenen Endpunkt statt zu einem Baustein — der
+// Import lief ins Leere und die Mail ging ohne HTML-Teil raus.
+// Unterordner werden nicht als Functions interpretiert.
+import { anfrageHtml } from './lib/vorlage'
 
 type Felder = {
   name: string
