@@ -231,13 +231,18 @@ export default function Hero() {
           </p>
 
           {/* Kurzfassung: was wir machen und seit wann. Alles Weitere steht auf
-              den Unterseiten — ausdrücklicher Wunsch des Kunden. */}
+              den Unterseiten — ausdrücklicher Wunsch des Kunden.
+
+              Die Jahreszahl gehoert an die Erfahrung am Bau, nicht an den Ort.
+              Vorher stand hier „seit über 16 Jahren im Raum Mühldorf am Inn" —
+              das las sich, als gaebe es den Betrieb dort seit 16 Jahren.
+              Richtiggestellt vom Kunden am 10.09.2026. */}
           <p
             data-auftakt="text"
             className="mt-6 max-w-[560px] text-[17px] font-medium leading-relaxed text-white/90 sm:text-[20px]"
           >
-            Ihr Handwerksbetrieb für Trockenbau, Innenausbau, Sanierung und Außenanlagen — seit über{' '}
-            {firma.jahre} Jahren im Raum Mühldorf am Inn.
+            Ihr Handwerksbetrieb für Trockenbau, Innenausbau, Sanierung und Außenanlagen im Raum
+            Mühldorf am Inn — mit über {firma.jahre} Jahren Erfahrung am Bau.
           </p>
 
           <div data-auftakt="cta" className="mt-9 flex flex-wrap gap-3.5">
