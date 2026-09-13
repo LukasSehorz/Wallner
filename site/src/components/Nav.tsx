@@ -88,16 +88,40 @@ export default function Nav() {
           </a>
         </nav>
 
-        <button
-          type="button"
-          ref={burger}
-          onClick={() => setOpen((v) => !v)}
-          className="flex h-11 w-11 items-center justify-center rounded-lg border border-white/20 text-white lg:hidden"
-          aria-label={open ? 'Menü schließen' : 'Menü öffnen'}
-          aria-expanded={open}
-        >
-          {open ? <IconClose className="h-6 w-6" /> : <IconMenu className="h-6 w-6" />}
-        </button>
+        {/* Anrufen und Burger — nur unterhalb von lg. Auf dem Desktop steht
+            „Jetzt anrufen" bereits in der Navigation daneben.
+
+            Der Anruf-Knopf steht bewusst AUSSERHALB des Klappmenues: Die
+            Kopfzeile ist `fixed` und bleibt beim Scrollen stehen, der Kontakt
+            ist damit auf jeder Seite und an jeder Scrollposition einen Tipp
+            entfernt. Vorher lag die Nummer nur im ausgeklappten Menue — wer
+            anrufen wollte, musste erst das Menue oeffnen oder bis zum
+            Kontaktbereich scrollen. Genau das hat der Kunde bemaengelt. */}
+        <div className="flex items-center gap-2.5 lg:hidden">
+          <a
+            href={firma.telefonHref}
+            className="flex h-11 shrink-0 items-center gap-2 rounded-lg bg-lime px-3 font-display text-[15px] font-bold uppercase tracking-wide text-forest-950 transition-transform active:scale-95 min-[360px]:px-3.5 sm:px-4 sm:text-[16px]"
+            aria-label={`${firma.name} anrufen: ${firma.telefon}`}
+          >
+            <IconPhone className="h-5 w-5 shrink-0" />
+            {/* Unter 360 px nur das Symbol: Mit Wort wurde der Knopf 124 px
+                breit, und auf einem 320-px-Schirm schnitt das den Burger
+                daneben an. Die Tippflaeche bleibt in beiden Faellen 44 px
+                hoch, das `aria-label` nennt ohnehin die volle Nummer. */}
+            <span className="hidden min-[360px]:inline">Anrufen</span>
+          </a>
+
+          <button
+            type="button"
+            ref={burger}
+            onClick={() => setOpen((v) => !v)}
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-white/20 text-white"
+            aria-label={open ? 'Menü schließen' : 'Menü öffnen'}
+            aria-expanded={open}
+          >
+            {open ? <IconClose className="h-6 w-6" /> : <IconMenu className="h-6 w-6" />}
+          </button>
+        </div>
       </div>
 
       {/* Mobiles Menü */}

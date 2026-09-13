@@ -340,7 +340,11 @@ export const stats = [
 /** Kennzahlen für den Über-uns-Block auf der Startseite */
 export const kennzahlen = [
   { wert: `${firma.jahre}+`, label: 'Jahre Erfahrung' },
-  { wert: '100%', label: 'Aus einer Hand' },
+  // Vorher „100% — Aus einer Hand". Der Kunde hat widersprochen: Es wird mit
+  // Partnerbetrieben gearbeitet, die Aussage waere so nicht haltbar. Die
+  // Koordination laeuft aber tatsaechlich ueber eine Stelle — das sagt die
+  // Kachel jetzt, ohne Alleinausfuehrung zu behaupten.
+  { wert: '1', label: 'Ansprechpartner für alle Gewerke' },
   { wert: '4', label: 'Regionen im Einzugsgebiet' },
   { wert: '1,5 t', label: 'Eigener Minibagger' },
 ]
