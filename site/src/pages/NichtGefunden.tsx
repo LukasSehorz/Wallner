@@ -27,7 +27,7 @@ export default function NichtGefunden() {
         titel="Seite nicht gefunden."
         text="Diese Adresse gibt es nicht (mehr). Über die Leistungen unten kommen Sie direkt weiter — oder rufen Sie uns einfach an."
         bild="/bilder/innenausbau-flur-rohbau.jpg"
-        bildAlt="Flur im Rohbau während des Innenausbaus"
+        bildAlt="Badezimmer im Ausbau mit großformatigen Fliesen in dunkler Marmoroptik"
         zurueck={{ label: 'Zur Startseite', to: '/' }}
       />
       <LeistungenGrid ueberschrift={false} />
